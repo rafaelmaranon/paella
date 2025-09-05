@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paella Master - Your Guide to Perfect Paella</title>
+    <title>Spanish Cuisine Master - Paella & Tapas Guide</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>">
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -14,7 +15,7 @@
             <div class="header-content">
                 <div class="logo">
                     <i class="fas fa-utensils paella-icon"></i>
-                    <h1>Paella Master</h1>
+                    <h1>Spanish Cuisine Master</h1>
                 </div>
                 <div class="measurement-toggle">
                     <button id="metricBtn" class="measurement-btn active">Metric</button>
@@ -36,6 +37,10 @@
             <button class="nav-btn" data-section="recipe">
                 <i class="fas fa-fire"></i>
                 <span>Recipe</span>
+            </button>
+            <button class="nav-btn" data-section="tapas">
+                <i class="fas fa-utensils"></i>
+                <span>Tapas</span>
             </button>
         </nav>
 
@@ -233,6 +238,38 @@
 
                 <div class="recipe-steps" id="recipeSteps">
                     <!-- Recipe steps will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Tapas Section -->
+            <section id="tapas" class="content-section">
+                <div class="section-header">
+                    <h2>Andalusian Tapas Collection</h2>
+                    <p>Discover 100 authentic tapas recipes from Andalusia, Spain</p>
+                </div>
+
+                <div class="tapas-search-container">
+                    <div class="search-controls">
+                        <div class="search-input-group">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="tapasSearch" placeholder="Search by ingredients (e.g., 'olives', 'cheese', 'seafood')">
+                        </div>
+                        
+                        <div class="allergen-filters">
+                            <h4>Filter by Allergies:</h4>
+                            <div class="allergen-buttons">
+                                <button class="allergen-btn" data-allergen="gluten">Gluten-Free</button>
+                                <button class="allergen-btn" data-allergen="dairy">Dairy-Free</button>
+                                <button class="allergen-btn" data-allergen="nuts">Nut-Free</button>
+                                <button class="allergen-btn" data-allergen="seafood">Seafood-Free</button>
+                                <button class="allergen-btn" data-allergen="eggs">Egg-Free</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tapas-results" id="tapasResults">
+                    <!-- Tapas recipes will be populated by JavaScript -->
                 </div>
             </section>
         </main>

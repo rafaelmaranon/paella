@@ -651,3 +651,241 @@ body {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* Tapas Section Styles */
+.tapas-search-container {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.search-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.search-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-input-group i {
+    position: absolute;
+    left: 1rem;
+    color: #666;
+    z-index: 1;
+}
+
+.search-input-group input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.search-input-group input:focus {
+    outline: none;
+    border-color: #ff6b35;
+}
+
+.allergen-filters h4 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.allergen-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.allergen-btn {
+    background: white;
+    border: 2px solid #ddd;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #666;
+}
+
+.allergen-btn:hover {
+    border-color: #ff6b35;
+    color: #ff6b35;
+}
+
+.allergen-btn.active {
+    background: #ff6b35;
+    border-color: #ff6b35;
+    color: white;
+}
+
+.tapas-results {
+    margin-top: 1rem;
+}
+
+.results-header {
+    margin-bottom: 1.5rem;
+}
+
+.results-header h3 {
+    color: #ff6b35;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.tapas-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.tapa-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tapa-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.tapa-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.tapa-name {
+    color: #ff6b35;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+    flex: 1;
+}
+
+.tapa-category {
+    background: #f8f9fa;
+    color: #666;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: capitalize;
+    margin-left: 1rem;
+}
+
+.tapa-description {
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.tapa-ingredients {
+    color: #333;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+}
+
+.tapa-ingredients strong {
+    color: #ff6b35;
+}
+
+.tapa-allergens {
+    margin-top: 0.5rem;
+}
+
+.tapa-allergens strong {
+    color: #ff6b35;
+    font-size: 0.9rem;
+}
+
+.allergen-badge {
+    display: inline-block;
+    background: #ff6b35;
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    margin: 0.2rem 0.2rem 0.2rem 0;
+    text-transform: capitalize;
+}
+
+.allergen-badge.allergen-gluten {
+    background: #e74c3c;
+}
+
+.allergen-badge.allergen-dairy {
+    background: #3498db;
+}
+
+.allergen-badge.allergen-nuts {
+    background: #f39c12;
+}
+
+.allergen-badge.allergen-seafood {
+    background: #1abc9c;
+}
+
+.allergen-badge.allergen-eggs {
+    background: #9b59b6;
+}
+
+.no-results {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #666;
+}
+
+.no-results i {
+    font-size: 3rem;
+    color: #ddd;
+    margin-bottom: 1rem;
+}
+
+.no-results h3 {
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+}
+
+.no-results p {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Responsive adjustments for tapas section */
+@media (max-width: 480px) {
+    .allergen-buttons {
+        flex-direction: column;
+    }
+    
+    .allergen-btn {
+        text-align: center;
+    }
+    
+    .tapa-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .tapa-category {
+        margin-left: 0;
+        margin-top: 0.5rem;
+        align-self: flex-start;
+    }
+}
