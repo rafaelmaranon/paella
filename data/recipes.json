@@ -1,0 +1,444 @@
+[
+  {
+    "id": "paella_valenciana",
+    "title": "Paella Valenciana",
+    "description": "The traditional paella from Valencia, made with chicken, rabbit, green beans, and white beans. This is the original paella recipe that started it all.",
+    "ingredients": [
+      "500g rice",
+      "5 tomatoes",
+      "1.7 peppers",
+      "1250ml water",
+      "500g chicken",
+      "500g rabbit",
+      "200g green beans",
+      "100g white beans",
+      "75ml olive oil",
+      "0.1g saffron",
+      "5g sweet paprika",
+      "10g salt"
+    ],
+    "steps": [
+      {
+        "text": "Heat olive oil in the paella pan over medium heat. Add chopped tomatoes and peppers, cook until softened and the mixture becomes a thick sauce.",
+        "seconds": 600
+      },
+      {
+        "text": "Add chicken and rabbit pieces, season with salt and paprika. Cook until golden brown on all sides.",
+        "seconds": 900
+      },
+      {
+        "text": "Add green beans and white beans, stir to combine with the meat and sofrito.",
+        "seconds": 300
+      },
+      {
+        "text": "Add the rice and stir to coat with oil. Add saffron and mix well.",
+        "seconds": 180
+      },
+      {
+        "text": "Add hot water and bring to a boil. Cook for 15-18 minutes without stirring.",
+        "seconds": 1080
+      },
+      {
+        "text": "Let rest for 5 minutes before serving. The bottom should have a crispy socarrat layer.",
+        "seconds": 300
+      }
+    ],
+    "time_minutes": 45,
+    "difficulty": "Intermediate",
+    "diet_tags": [
+      "meat"
+    ],
+    "allergens": [],
+    "equipment": [
+      "paella pan",
+      "wooden spoon"
+    ],
+    "cuisine": "spanish",
+    "region": "Valencia",
+    "category": "paella",
+    "image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    "id": "paella_marisco",
+    "title": "Paella de Marisco",
+    "description": "Seafood paella with shrimp, mussels, and squid in saffron rice.",
+    "ingredients": [
+      "500g rice",
+      "300g shrimp",
+      "200g mussels",
+      "150g squid",
+      "1 onion",
+      "2 tomatoes",
+      "3 cloves garlic",
+      "1.5L fish stock",
+      "0.1g saffron",
+      "75ml olive oil",
+      "salt",
+      "parsley"
+    ],
+    "steps": [
+      {
+        "text": "Heat olive oil in paella pan. Sauté onion and garlic until soft.",
+        "seconds": 300
+      },
+      {
+        "text": "Add chopped tomatoes and cook until they break down.",
+        "seconds": 600
+      },
+      {
+        "text": "Add rice and stir to coat with oil. Add saffron.",
+        "seconds": 180
+      },
+      {
+        "text": "Add hot fish stock and bring to boil. Cook for 10 minutes.",
+        "seconds": 600
+      },
+      {
+        "text": "Add seafood and cook for 8-10 minutes more.",
+        "seconds": 600
+      },
+      {
+        "text": "Let rest and garnish with parsley.",
+        "seconds": 300
+      }
+    ],
+    "time_minutes": 35,
+    "difficulty": "Intermediate",
+    "diet_tags": [
+      "seafood"
+    ],
+    "allergens": [
+      "fish",
+      "shellfish"
+    ],
+    "equipment": [
+      "paella pan"
+    ],
+    "cuisine": "spanish",
+    "region": "Valencia",
+    "category": "paella",
+    "image": "https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    "id": "tapa_jamon_iberico",
+    "title": "Jamón Ibérico",
+    "description": "Premium cured ham from Iberian pigs, served thinly sliced",
+    "ingredients": [
+      "jamón ibérico",
+      "olive oil"
+    ],
+    "steps": [
+      {
+        "text": "Slice jamón ibérico very thinly",
+        "seconds": 120
+      },
+      {
+        "text": "Arrange on plate and drizzle with olive oil",
+        "seconds": 60
+      }
+    ],
+    "time_minutes": 3,
+    "difficulty": "Easy",
+    "diet_tags": [
+      "meat"
+    ],
+    "allergens": [],
+    "equipment": [
+      "knife",
+      "cutting board"
+    ],
+    "cuisine": "spanish",
+    "region": "Andalusia",
+    "category": "tapas",
+    "image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    "id": "tapa_aceitunas",
+    "title": "Aceitunas Aliñadas",
+    "description": "Marinated green olives with herbs and spices",
+    "ingredients": [
+      "green olives",
+      "garlic",
+      "oregano",
+      "olive oil",
+      "vinegar"
+    ],
+    "steps": [
+      {
+        "text": "Mix olives with minced garlic and oregano",
+        "seconds": 60
+      },
+      {
+        "text": "Add olive oil and vinegar, let marinate for 30 minutes",
+        "seconds": 1800
+      }
+    ],
+    "time_minutes": 5,
+    "difficulty": "Easy",
+    "diet_tags": [
+      "vegetarian"
+    ],
+    "allergens": [],
+    "equipment": [
+      "bowl"
+    ],
+    "cuisine": "spanish",
+    "region": "Andalusia",
+    "category": "tapas",
+    "image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    "id": "tapa_tortilla_espanola",
+    "title": "Tortilla Española",
+    "description": "Classic Spanish potato omelet",
+    "ingredients": [
+      "potatoes",
+      "eggs",
+      "onion",
+      "olive oil",
+      "salt"
+    ],
+    "steps": [
+      {
+        "text": "Slice potatoes and onion thinly",
+        "seconds": 300
+      },
+      {
+        "text": "Fry potatoes and onion in olive oil until soft",
+        "seconds": 900
+      },
+      {
+        "text": "Beat eggs and mix with cooked potatoes",
+        "seconds": 120
+      },
+      {
+        "text": "Cook in pan, flipping once to cook both sides",
+        "seconds": 600
+      }
+    ],
+    "time_minutes": 25,
+    "difficulty": "Intermediate",
+    "diet_tags": [
+      "vegetarian"
+    ],
+    "allergens": [],
+    "equipment": [
+      "frying pan",
+      "spatula"
+    ],
+    "cuisine": "spanish",
+    "region": "Andalusia",
+    "category": "tapas",
+    "image": "https://images.unsplash.com/photo-1572441713132-51c75654db73?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    "id": "tapa_gambas_ajillo",
+    "title": "Gambas al Ajillo",
+    "description": "Garlic shrimp cooked in olive oil with chili",
+    "ingredients": [
+      "shrimp",
+      "garlic",
+      "olive oil",
+      "chili pepper",
+      "parsley"
+    ],
+    "steps": [
+      {
+        "text": "Heat olive oil in pan with sliced garlic",
+        "seconds": 120
+      },
+      {
+        "text": "Add shrimp and chili, cook for 2-3 minutes",
+        "seconds": 180
+      },
+      {
+        "text": "Garnish with parsley and serve hot",
+        "seconds": 60
+      }
+    ],
+    "time_minutes": 8,
+    "difficulty": "Easy",
+    "diet_tags": [
+      "seafood"
+    ],
+    "allergens": [
+      "shellfish"
+    ],
+    "equipment": [
+      "frying pan"
+    ],
+    "cuisine": "spanish",
+    "region": "Andalusia",
+    "category": "tapas",
+    "image": "https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    "id": "tapa_patatas_bravas",
+    "title": "Patatas Bravas",
+    "description": "Fried potatoes with spicy tomato sauce and aioli",
+    "ingredients": [
+      "potatoes",
+      "tomato sauce",
+      "garlic",
+      "olive oil",
+      "paprika"
+    ],
+    "steps": [
+      {
+        "text": "Cut potatoes into cubes and fry until golden",
+        "seconds": 600
+      },
+      {
+        "text": "Make spicy tomato sauce with paprika",
+        "seconds": 300
+      },
+      {
+        "text": "Make aioli with garlic and olive oil",
+        "seconds": 180
+      },
+      {
+        "text": "Serve potatoes with both sauces",
+        "seconds": 60
+      }
+    ],
+    "time_minutes": 20,
+    "difficulty": "Easy",
+    "diet_tags": [
+      "vegetarian"
+    ],
+    "allergens": [],
+    "equipment": [
+      "frying pan",
+      "blender"
+    ],
+    "cuisine": "spanish",
+    "region": "Andalusia",
+    "category": "tapas",
+    "image": "https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    "id": "tapa_croquetas_jamon",
+    "title": "Croquetas de Jamón",
+    "description": "Creamy ham croquettes, breaded and fried",
+    "ingredients": [
+      "jamón",
+      "flour",
+      "milk",
+      "eggs",
+      "breadcrumbs",
+      "butter"
+    ],
+    "steps": [
+      {
+        "text": "Make béchamel sauce with flour, milk and butter",
+        "seconds": 600
+      },
+      {
+        "text": "Add diced jamón to the sauce",
+        "seconds": 120
+      },
+      {
+        "text": "Chill mixture and form into croquettes",
+        "seconds": 1800
+      },
+      {
+        "text": "Bread with eggs and breadcrumbs, then fry",
+        "seconds": 600
+      }
+    ],
+    "time_minutes": 45,
+    "difficulty": "Advanced",
+    "diet_tags": [
+      "meat"
+    ],
+    "allergens": [
+      "milk",
+      "wheat_gluten"
+    ],
+    "equipment": [
+      "saucepan",
+      "frying pan"
+    ],
+    "cuisine": "spanish",
+    "region": "Andalusia",
+    "category": "tapas",
+    "image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    "id": "tapa_boquerones_vinagre",
+    "title": "Boquerones en Vinagre",
+    "description": "Fresh anchovies marinated in vinegar",
+    "ingredients": [
+      "anchovies",
+      "vinegar",
+      "garlic",
+      "parsley",
+      "olive oil"
+    ],
+    "steps": [
+      {
+        "text": "Clean and fillet fresh anchovies",
+        "seconds": 600
+      },
+      {
+        "text": "Marinate in vinegar for 2 hours",
+        "seconds": 7200
+      },
+      {
+        "text": "Dress with olive oil, garlic and parsley",
+        "seconds": 120
+      }
+    ],
+    "time_minutes": 15,
+    "difficulty": "Intermediate",
+    "diet_tags": [
+      "seafood"
+    ],
+    "allergens": [],
+    "equipment": [
+      "knife",
+      "bowl"
+    ],
+    "cuisine": "spanish",
+    "region": "Andalusia",
+    "category": "tapas",
+    "image": "https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    "id": "tapa_pimientos_padron",
+    "title": "Pimientos de Padrón",
+    "description": "Small green peppers fried in olive oil and sea salt",
+    "ingredients": [
+      "padrón peppers",
+      "olive oil",
+      "sea salt"
+    ],
+    "steps": [
+      {
+        "text": "Heat olive oil in pan",
+        "seconds": 120
+      },
+      {
+        "text": "Add peppers and fry until blistered",
+        "seconds": 300
+      },
+      {
+        "text": "Season with sea salt and serve",
+        "seconds": 60
+      }
+    ],
+    "time_minutes": 8,
+    "difficulty": "Easy",
+    "diet_tags": [
+      "vegetarian"
+    ],
+    "allergens": [],
+    "equipment": [
+      "frying pan"
+    ],
+    "cuisine": "spanish",
+    "region": "Andalusia",
+    "category": "tapas",
+    "image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+  }
+]

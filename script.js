@@ -315,6 +315,7 @@ function initializeApp() {
     updateRecipe();
     updatePaelleraSize();
     updateTapasResults();
+    setupAISearch();
     console.log('App initialized successfully');
 }
 
@@ -857,4 +858,151 @@ function formatNumber(num) {
     } else {
         return Math.round(num);
     }
+}
+
+// AI Search functionality
+function setupAISearch() {
+    const searchBtn = document.getElementById('aiSearchBtn');
+    const searchInput = document.getElementById('aiSearchInput');
+    
+    if (searchBtn && searchInput) {
+        searchBtn.addEventListener('click', performAISearch);
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performAISearch();
+            }
+        });
+    }
+}
+
+async function performAISearch() {
+    const query = document.getElementById('aiSearchInput').value.trim();
+    const maxTime = document.getElementById('maxTimeInput').value;
+    const category = document.getElementById('categorySelect').value;
+    const allergenSelect = document.getElementById('allergenSelect');
+    const resultsDiv = document.getElementById('aiSearchResults');
+    
+    if (!query) {
+        alert('Please enter a search query');
+        return;
+    }
+    
+    // Get selected allergens
+    const excludeAllergens = Array.from(allergenSelect.selectedOptions).map(option => option.value);
+    
+    // Show loading state
+    resultsDiv.innerHTML = '<div class="text-center py-8"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div><p class="mt-2 text-gray-600">Searching with AI...</p></div>';
+    
+    try {
+        const response = await fetch('http://localhost:3001/search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: query,
+                maxTime: parseInt(maxTime),
+                excludeAllergens: excludeAllergens,
+                category: category || undefined
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        displayAISearchResults(data.results);
+        
+    } catch (error) {
+        console.error('AI Search error:', error);
+        resultsDiv.innerHTML = `
+            <div class="text-center py-8 text-red-600">
+                <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+                <p class="text-lg font-semibold">Search Error</p>
+                <p class="text-sm">Make sure the AI backend is running on port 3001</p>
+                <p class="text-xs mt-2">Error: ${error.message}</p>
+            </div>
+        `;
+    }
+}
+
+function displayAISearchResults(results) {
+    const resultsDiv = document.getElementById('aiSearchResults');
+    
+    if (!results || results.length === 0) {
+        resultsDiv.innerHTML = `
+            <div class="text-center py-8">
+                <i class="fas fa-search text-4xl text-gray-400 mb-4"></i>
+                <p class="text-lg text-gray-600">No recipes found</p>
+                <p class="text-sm text-gray-500">Try adjusting your search terms or filters</p>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = `<div class="mb-4 text-sm text-gray-600">Found ${results.length} recipes</div>`;
+    
+    results.forEach(recipe => {
+        const allergenBadges = recipe.allergens && recipe.allergens.length > 0 
+            ? recipe.allergens.map(allergen => 
+                `<span class="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full mr-1 mb-1">${allergen}</span>`
+              ).join('')
+            : '';
+        
+        const scoreBadge = recipe.score 
+            ? `<span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">${(recipe.score * 100).toFixed(1)}% match</span>`
+            : '';
+        
+        html += `
+            <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                <div class="flex justify-between items-start mb-3">
+                    <h3 class="text-xl font-semibold text-gray-900">${recipe.title}</h3>
+                    <div class="flex gap-2">
+                        ${scoreBadge}
+                        <span class="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full capitalize">${recipe.category}</span>
+                    </div>
+                </div>
+                
+                <p class="text-gray-700 mb-3">${recipe.description}</p>
+                
+                <div class="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                    <span><i class="fas fa-clock mr-1"></i>${recipe.time_minutes} min</span>
+                    <span><i class="fas fa-signal mr-1"></i>${recipe.difficulty}</span>
+                    <span><i class="fas fa-map-marker-alt mr-1"></i>${recipe.region}</span>
+                </div>
+                
+                <div class="text-sm text-gray-600 mb-3">
+                    <strong>Ingredients:</strong> ${recipe.ingredients.slice(0, 5).join(', ')}${recipe.ingredients.length > 5 ? '...' : ''}
+                </div>
+                
+                ${allergenBadges ? `<div class="mb-3"><strong class="text-red-700">Contains:</strong> ${allergenBadges}</div>` : ''}
+                
+                <div class="flex gap-2">
+                    <button onclick="openCookingMode('${recipe.id}')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-utensils mr-2"></i>Start Cooking
+                    </button>
+                    <button onclick="viewRecipeDetails('${recipe.id}')" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
+                        <i class="fas fa-info-circle mr-2"></i>View Details
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+    
+    resultsDiv.innerHTML = html;
+}
+
+function openCookingMode(recipeId) {
+    // This would open the cooking mode for the specific recipe
+    console.log('Opening cooking mode for recipe:', recipeId);
+    // For now, just show an alert
+    alert(`Cooking mode for ${recipeId} would open here!`);
+}
+
+function viewRecipeDetails(recipeId) {
+    // This would show detailed recipe information
+    console.log('Viewing details for recipe:', recipeId);
+    // For now, just show an alert
+    alert(`Recipe details for ${recipeId} would show here!`);
 }
