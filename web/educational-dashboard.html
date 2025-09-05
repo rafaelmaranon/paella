@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Quality Dashboard - Educational</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .metric-card {
+            transition: all 0.3s ease;
+        }
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .status-green { background: linear-gradient(135deg, #10b981, #059669); }
+        .status-amber { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .status-red { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .tooltip:hover::before {
+            content: '';
+            position: absolute;
+            bottom: 115%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #1f2937;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">
+                        <i class="fas fa-graduation-cap text-blue-600 mr-2"></i>
+                        AI Quality Dashboard
+                    </h1>
+                    <p class="text-sm text-gray-600">Educational metrics for self-testing before prototype</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-sm text-gray-500">Last updated</div>
+                    <div class="font-mono text-sm" id="lastUpdated">--:--</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- KPI Tiles (Top Row) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+            <!-- Precision@10 (Search) -->
+            <div class="metric-card status-green rounded-xl p-6 text-white">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <p class="text-sm opacity-90">Precision@10</p>
+                        <p class="text-3xl font-bold" id="precision10">0.85</p>
+                        <p class="text-sm opacity-90">Target: ≥0.70</p>
+                    </div>
+                    <i class="fas fa-bullseye text-4xl opacity-50 tooltip" data-tooltip="Of the top 10 results, how many are good?"></i>
+                </div>
+                <div class="text-xs opacity-75">
+                    <i class="fas fa-lightbulb mr-1"></i>
+                    If low: add synonyms; boost title/ingredients
+                </div>
+            </div>
+
+            <!-- Allergen Recall (Safety) -->
+            <div class="metric-card status-green rounded-xl p-6 text-white">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <p class="text-sm opacity-90">Allergen Recall</p>
+                        <p class="text-3xl font-bold" id="allergenRecall">0.96</p>
+                        <p class="text-sm opacity-90">Target: ≥0.98</p>
+                    </div>
+                    <i class="fas fa-shield-alt text-4xl opacity-50 tooltip" data-tooltip="How many true allergen cases did we catch?"></i>
+                </div>
+                <div class="text-xs opacity-75">
+                    <i class="fas fa-lightbulb mr-1"></i>
+                    If low: expand lexicon; add aliases (tahini→sesame)
+                </div>
+            </div>
+
+            <!-- Latency P95 (Search) -->
+            <div class="metric-card status-amber rounded-xl p-6 text-white">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <p class="text-sm opacity-90">Latency P95</p>
+                        <p class="text-3xl font-bold" id="latencyP95">2.8s</p>
+                        <p class="text-sm opacity-90">Target: ≤2.5s</p>
+                    </div>
+                    <i class="fas fa-tachometer-alt text-4xl opacity-50 tooltip" data-tooltip="Worst-case speed for typical users"></i>
+                </div>
+                <div class="text-xs opacity-75">
+                    <i class="fas fa-lightbulb mr-1"></i>
+                    If high: cache queries; precompute vectors
+                </div>
+            </div>
+
+            <!-- Time-to-First-Cook -->
+            <div class="metric-card status-red rounded-xl p-6 text-white">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <p class="text-sm opacity-90">Time-to-First-Cook</p>
+                        <p class="text-3xl font-bold" id="timeToCook">45s</p>
+                        <p class="text-sm opacity-90">Target: ≤30s</p>
+                    </div>
+                    <i class="fas fa-clock text-4xl opacity-50 tooltip" data-tooltip="From first search → start cooking"></i>
+                </div>
+                <div class="text-xs opacity-75">
+                    <i class="fas fa-lightbulb mr-1"></i>
+                    If high: better filters; clearer cards
+                </div>
+            </div>
+
+            <!-- Hallucination Rate -->
+            <div class="metric-card status-green rounded-xl p-6 text-white">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <p class="text-sm opacity-90">Hallucination Rate</p>
+                        <p class="text-3xl font-bold" id="hallucinationRate">1.2%</p>
+                        <p class="text-sm opacity-90">Target: ≤2%</p>
+                    </div>
+                    <i class="fas fa-exclamation-triangle text-4xl opacity-50 tooltip" data-tooltip="How often instructions are factually/safety wrong"></i>
+                </div>
+                <div class="text-xs opacity-75">
+                    <i class="fas fa-lightbulb mr-1"></i>
+                    If high: constrain to DB; add validators
+                </div>
+            </div>
+        </div>
+
+        <!-- Trends Section (Second Row) -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- 7-day Sparklines -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                    <i class="fas fa-chart-line text-blue-600 mr-2"></i>
+                    7-Day Trends
+                </h3>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-medium">Precision@10</span>
+                            <span class="text-sm text-gray-500">0.85</span>
+                        </div>
+                        <canvas id="precisionChart" width="200" height="40"></canvas>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-medium">P95 Latency</span>
+                            <span class="text-sm text-gray-500">2.8s</span>
+                        </div>
+                        <canvas id="latencyChart" width="200" height="40"></canvas>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-medium">Allergen Recall</span>
+                            <span class="text-sm text-gray-500">0.96</span>
+                        </div>
+                        <canvas id="allergenChart" width="200" height="40"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Failing Queries -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                    <i class="fas fa-exclamation-circle text-red-600 mr-2"></i>
+                    Top Failing Queries
+                </h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                        <span class="text-sm font-medium">"nut-free pasta"</span>
+                        <span class="text-xs bg-red-200 text-red-800 px-2 py-1 rounded">P@10: 0.3</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                        <span class="text-sm font-medium">"quick chicken"</span>
+                        <span class="text-xs bg-red-200 text-red-800 px-2 py-1 rounded">P@10: 0.4</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                        <span class="text-sm font-medium">"vegetarian tapas"</span>
+                        <span class="text-xs bg-red-200 text-red-800 px-2 py-1 rounded">P@10: 0.2</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Allergen Misses -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                    <i class="fas fa-bug text-orange-600 mr-2"></i>
+                    Allergen Misses
+                </h3>
+                <div class="space-y-3">
+                    <div class="p-3 bg-orange-50 rounded-lg">
+                        <div class="text-sm font-medium text-orange-800">"tahini" → sesame</div>
+                        <div class="text-xs text-orange-600">Recipe: Hummus</div>
+                    </div>
+                    <div class="p-3 bg-orange-50 rounded-lg">
+                        <div class="text-sm font-medium text-orange-800">"cashew cream" → tree_nut</div>
+                        <div class="text-xs text-orange-600">Recipe: Vegan Pasta</div>
+                    </div>
+                    <div class="p-3 bg-orange-50 rounded-lg">
+                        <div class="text-sm font-medium text-orange-800">"whey protein" → milk</div>
+                        <div class="text-xs text-orange-600">Recipe: Protein Smoothie</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Teach Me Panel (Right Side) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- How to Self-Test -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                    <i class="fas fa-flask text-purple-600 mr-2"></i>
+                    How to Self-Test (This Week)
+                </h3>
+                <div class="space-y-4">
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <h4 class="font-semibold text-blue-900 mb-2">1. Build Gold Set (25 queries)</h4>
+                        <p class="text-sm text-blue-800">"nut-free 20-min pasta", "kid-friendly chicken 2 pans"</p>
+                    </div>
+                    <div class="p-4 bg-green-50 rounded-lg">
+                        <h4 class="font-semibold text-green-900 mb-2">2. Mark Relevance (yes/no)</h4>
+                        <p class="text-sm text-green-800">For each query, mark which recipes are relevant</p>
+                    </div>
+                    <div class="p-4 bg-yellow-50 rounded-lg">
+                        <h4 class="font-semibold text-yellow-900 mb-2">3. Run & Record</h4>
+                        <p class="text-sm text-yellow-800">50 searches via DevTools → compute P95 Latency</p>
+                    </div>
+                    <div class="p-4 bg-purple-50 rounded-lg">
+                        <h4 class="font-semibold text-purple-900 mb-2">4. Time Yourself</h4>
+                        <p class="text-sm text-purple-800">10 sessions: search → "Start Cooking"</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weekly Learning Ritual -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                    <i class="fas fa-calendar-week text-indigo-600 mr-2"></i>
+                    Weekly Learning Ritual (10 min)
+                </h3>
+                <div class="space-y-3">
+                    <div class="flex items-start">
+                        <div class="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3"></div>
+                        <div>
+                            <p class="text-sm font-medium">Look at Precision@10 trend</p>
+                            <p class="text-xs text-gray-600">→ fix the worst 3 queries</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3"></div>
+                        <div>
+                            <p class="text-sm font-medium">Check Allergen Recall</p>
+                            <p class="text-xs text-gray-600">→ add 5 new aliases</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="w-2 h-2 bg-yellow-500 rounded-full mt-2 mr-3"></div>
+                        <div>
+                            <p class="text-sm font-medium">If P95 latency red</p>
+                            <p class="text-xs text-gray-600">→ cache top 10 queries</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="w-2 h-2 bg-purple-500 rounded-full mt-2 mr-3"></div>
+                        <div>
+                            <p class="text-sm font-medium">Track Time-to-First-Cook</p>
+                            <p class="text-xs text-gray-600">→ improve card clarity if >30s</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            updateLastUpdated();
+            initializeCharts();
+            setInterval(updateLastUpdated, 1000);
+        });
+
+        function updateLastUpdated() {
+            document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+        }
+
+        function initializeCharts() {
+            // Precision@10 Sparkline
+            const precisionCtx = document.getElementById('precisionChart').getContext('2d');
+            new Chart(precisionCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        data: [0.82, 0.85, 0.83, 0.87, 0.85, 0.84, 0.85],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { display: false },
+                        y: { display: false }
+                    }
+                }
+            });
+
+            // Latency P95 Sparkline
+            const latencyCtx = document.getElementById('latencyChart').getContext('2d');
+            new Chart(latencyCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        data: [2.1, 2.3, 2.8, 2.5, 2.7, 2.9, 2.8],
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { display: false },
+                        y: { display: false }
+                    }
+                }
+            });
+
+            // Allergen Recall Sparkline
+            const allergenCtx = document.getElementById('allergenChart').getContext('2d');
+            new Chart(allergenCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        data: [0.94, 0.96, 0.95, 0.97, 0.96, 0.95, 0.96],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { display: false },
+                        y: { display: false }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
