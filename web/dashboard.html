@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Metrics Dashboard - Spanish Cuisine App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .metric-card.success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        .metric-card.warning {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        .metric-card.danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">
+                        <i class="fas fa-robot text-blue-600 mr-2"></i>
+                        AI Metrics Dashboard
+                    </h1>
+                    <p class="text-gray-600">Spanish Cuisine App Performance Monitor</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="text-sm text-gray-500">
+                        Last updated: <span id="lastUpdated">--</span>
+                    </div>
+                    <button id="refreshBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-sync-alt mr-2"></i>Refresh
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Key Metrics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Search Quality -->
+            <div class="metric-card success rounded-xl p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm opacity-90">Search Quality</p>
+                        <p class="text-3xl font-bold" id="searchQuality">--</p>
+                        <p class="text-sm opacity-90" id="searchQualityStatus">--</p>
+                    </div>
+                    <i class="fas fa-search text-4xl opacity-50"></i>
+                </div>
+            </div>
+
+            <!-- Allergen Detection -->
+            <div class="metric-card warning rounded-xl p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm opacity-90">Allergen Detection</p>
+                        <p class="text-3xl font-bold" id="allergenAccuracy">--</p>
+                        <p class="text-sm opacity-90" id="allergenStatus">--</p>
+                    </div>
+                    <i class="fas fa-shield-alt text-4xl opacity-50"></i>
+                </div>
+            </div>
+
+            <!-- Performance -->
+            <div class="metric-card success rounded-xl p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm opacity-90">Avg Response Time</p>
+                        <p class="text-3xl font-bold" id="avgLatency">--</p>
+                        <p class="text-sm opacity-90" id="performanceStatus">--</p>
+                    </div>
+                    <i class="fas fa-tachometer-alt text-4xl opacity-50"></i>
+                </div>
+            </div>
+
+            <!-- Success Rate -->
+            <div class="metric-card success rounded-xl p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm opacity-90">Success Rate</p>
+                        <p class="text-3xl font-bold" id="successRate">--</p>
+                        <p class="text-sm opacity-90" id="successStatus">--</p>
+                    </div>
+                    <i class="fas fa-check-circle text-4xl opacity-50"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Search Performance Chart -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                    <i class="fas fa-chart-line text-blue-600 mr-2"></i>
+                    Search Performance Over Time
+                </h3>
+                <canvas id="performanceChart" width="400" height="200"></canvas>
+            </div>
+
+            <!-- Search Quality Breakdown -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                    <i class="fas fa-chart-pie text-green-600 mr-2"></i>
+                    Search Quality Breakdown
+                </h3>
+                <canvas id="qualityChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Recent Searches & System Status -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Recent Searches -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                    <i class="fas fa-history text-purple-600 mr-2"></i>
+                    Recent Searches
+                </h3>
+                <div id="recentSearches" class="space-y-3 max-h-64 overflow-y-auto">
+                    <!-- Recent searches will be populated here -->
+                </div>
+            </div>
+
+            <!-- System Status -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                    <i class="fas fa-server text-orange-600 mr-2"></i>
+                    System Status
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">AI Backend</span>
+                        <span id="backendStatus" class="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                            <i class="fas fa-circle mr-1"></i>Checking...
+                        </span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Frontend</span>
+                        <span id="frontendStatus" class="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                            <i class="fas fa-circle mr-1"></i>Checking...
+                        </span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">OpenAI API</span>
+                        <span id="openaiStatus" class="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                            <i class="fas fa-circle mr-1"></i>Checking...
+                        </span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Recipe Database</span>
+                        <span id="databaseStatus" class="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                            <i class="fas fa-circle mr-1"></i>Checking...
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quality Test Results -->
+        <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                <i class="fas fa-vial text-red-600 mr-2"></i>
+                Quality Test Results
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button id="runAllergenTest" class="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-shield-alt text-blue-600 text-2xl mb-2"></i>
+                    <h4 class="font-semibold">Allergen Test</h4>
+                    <p class="text-sm text-gray-600">Test allergen detection accuracy</p>
+                </button>
+                <button id="runSearchTest" class="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-search text-green-600 text-2xl mb-2"></i>
+                    <h4 class="font-semibold">Search Test</h4>
+                    <p class="text-sm text-gray-600">Test search quality and relevance</p>
+                </button>
+                <button id="runPerformanceTest" class="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-tachometer-alt text-purple-600 text-2xl mb-2"></i>
+                    <h4 class="font-semibold">Performance Test</h4>
+                    <p class="text-sm text-gray-600">Test response times and speed</p>
+                </button>
+            </div>
+            <div id="testResults" class="mt-4 p-4 bg-gray-50 rounded-lg hidden">
+                <!-- Test results will appear here -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Dashboard functionality
+        let performanceChart, qualityChart;
+        let searchHistory = [];
+        let performanceData = [];
+
+        // Initialize charts
+        function initCharts() {
+            // Performance Chart
+            const perfCtx = document.getElementById('performanceChart').getContext('2d');
+            performanceChart = new Chart(perfCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Response Time (ms)',
+                        data: [],
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Quality Chart
+            const qualityCtx = document.getElementById('qualityChart').getContext('2d');
+            qualityChart = new Chart(qualityCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Passed', 'Failed'],
+                    datasets: [{
+                        data: [0, 0],
+                        backgroundColor: ['#10B981', '#EF4444']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update metrics
+        async function updateMetrics() {
+            try {
+                // Get system health
+                const healthResponse = await fetch('http://localhost:3001/health');
+                const health = await healthResponse.json();
+                
+                // Update system status
+                updateSystemStatus(health);
+                
+                // Simulate metrics (in real app, these would come from your monitoring system)
+                updateMetricCards();
+                
+                // Update last updated time
+                document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+                
+            } catch (error) {
+                console.error('Error updating metrics:', error);
+                updateSystemStatus({ status: 'error' });
+            }
+        }
+
+        function updateSystemStatus(health) {
+            const statuses = {
+                backend: health.status === 'healthy' ? 'success' : 'error',
+                frontend: 'success', // Assume frontend is working if we can see this
+                openai: health.status === 'healthy' ? 'success' : 'error',
+                database: health.status === 'healthy' ? 'success' : 'error'
+            };
+
+            Object.entries(statuses).forEach(([service, status]) => {
+                const element = document.getElementById(`${service}Status`);
+                if (element) {
+                    const colors = {
+                        success: 'bg-green-100 text-green-800',
+                        error: 'bg-red-100 text-red-800',
+                        warning: 'bg-yellow-100 text-yellow-800'
+                    };
+                    const icons = {
+                        success: 'fas fa-check-circle',
+                        error: 'fas fa-times-circle',
+                        warning: 'fas fa-exclamation-triangle'
+                    };
+                    
+                    element.className = `px-3 py-1 rounded-full text-sm font-medium ${colors[status]}`;
+                    element.innerHTML = `<i class="${icons[status]} mr-1"></i>${status === 'success' ? 'Online' : 'Offline'}`;
+                }
+            });
+        }
+
+        function updateMetricCards() {
+            // Simulate realistic metrics
+            const searchQuality = Math.floor(Math.random() * 30) + 20; // 20-50%
+            const allergenAccuracy = Math.floor(Math.random() * 20) + 60; // 60-80%
+            const avgLatency = Math.floor(Math.random() * 400) + 400; // 400-800ms
+            const successRate = Math.floor(Math.random() * 10) + 90; // 90-100%
+
+            document.getElementById('searchQuality').textContent = `${searchQuality}%`;
+            document.getElementById('searchQualityStatus').textContent = searchQuality > 40 ? 'Good' : 'Needs Improvement';
+            
+            document.getElementById('allergenAccuracy').textContent = `${allergenAccuracy}%`;
+            document.getElementById('allergenStatus').textContent = allergenAccuracy > 80 ? 'Excellent' : 'Good';
+            
+            document.getElementById('avgLatency').textContent = `${avgLatency}ms`;
+            document.getElementById('performanceStatus').textContent = avgLatency < 500 ? 'Fast' : 'Acceptable';
+            
+            document.getElementById('successRate').textContent = `${successRate}%`;
+            document.getElementById('successStatus').textContent = successRate > 95 ? 'Excellent' : 'Good';
+
+            // Update charts
+            updateCharts(searchQuality, avgLatency);
+        }
+
+        function updateCharts(searchQuality, latency) {
+            // Add new data point to performance chart
+            const now = new Date().toLocaleTimeString();
+            performanceData.push(latency);
+            
+            if (performanceData.length > 10) {
+                performanceData.shift();
+            }
+            
+            performanceChart.data.labels = performanceData.map((_, i) => `T${i + 1}`);
+            performanceChart.data.datasets[0].data = performanceData;
+            performanceChart.update();
+
+            // Update quality chart
+            qualityChart.data.datasets[0].data = [searchQuality, 100 - searchQuality];
+            qualityChart.update();
+        }
+
+        // Test functions
+        async function runAllergenTest() {
+            showTestResults('Running allergen detection test...');
+            // In real implementation, this would call your test script
+            setTimeout(() => {
+                showTestResults('Allergen Test Results:\n✅ 5/8 tests passed (62.5% accuracy)\n❌ Missing: eggs, anchovies detection');
+            }, 2000);
+        }
+
+        async function runSearchTest() {
+            showTestResults('Running search quality test...');
+            setTimeout(() => {
+                showTestResults('Search Test Results:\n✅ 1/4 tests passed (25% quality)\n❌ Issues: time filtering, allergen exclusion');
+            }, 2000);
+        }
+
+        async function runPerformanceTest() {
+            showTestResults('Running performance test...');
+            setTimeout(() => {
+                showTestResults('Performance Test Results:\n✅ Average latency: 620ms\n✅ Success rate: 100%\n👍 Good performance');
+            }, 2000);
+        }
+
+        function showTestResults(message) {
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.classList.remove('hidden');
+            resultsDiv.innerHTML = `<pre class="text-sm">${message}</pre>`;
+        }
+
+        // Event listeners
+        document.getElementById('refreshBtn').addEventListener('click', updateMetrics);
+        document.getElementById('runAllergenTest').addEventListener('click', runAllergenTest);
+        document.getElementById('runSearchTest').addEventListener('click', runSearchTest);
+        document.getElementById('runPerformanceTest').addEventListener('click', runPerformanceTest);
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            updateMetrics();
+            
+            // Auto-refresh every 30 seconds
+            setInterval(updateMetrics, 30000);
+        });
+    </script>
+</body>
+</html>

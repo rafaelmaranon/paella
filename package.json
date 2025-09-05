@@ -8,7 +8,11 @@
     "dev:embed": "tsx scripts/buildEmbeddings.ts",
     "dev:tag": "tsx scripts/tagAllergens.ts",
     "dev:web": "python3 -m http.server 8080",
-    "start": "npm run dev:api"
+    "start": "npm run dev:api",
+    "test:search": "tsx scripts/validateSearch.ts",
+    "test:allergens": "tsx scripts/validateAllergens.ts",
+    "test:performance": "tsx scripts/performanceTest.ts",
+    "test:all": "npm run test:allergens && npm run test:search && npm run test:performance"
   },
   "dependencies": {
     "cors": "^2.8.5",

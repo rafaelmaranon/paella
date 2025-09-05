@@ -28,7 +28,7 @@ const LEXICON: Record<Allergen, RegExp[]> = {
     /\b(manchego|parmesano|roquefort|gorgonzola|mozzarella)\b/i
   ],
   egg: [
-    /\b(egg|albumen|mayonnaise|mayo)\b/i,
+    /\b(egg|eggs|albumen|mayonnaise|mayo)\b/i,
     /\b(huevo|huevos|albúmina|mayonesa|mahonesa)\b/i
   ],
   wheat_gluten: [
@@ -42,9 +42,9 @@ const LEXICON: Record<Allergen, RegExp[]> = {
     /\b(soja|tofu|tempeh|edamame|salsa\s*de\s*soja)\b/i
   ],
   fish: [
-    /\b(salmon|tuna|cod|trout|anchovy|haddock|mackerel|snapper)\b/i, 
+    /\b(salmon|tuna|cod|trout|anchovy|anchovies|haddock|mackerel|snapper)\b/i, 
     /\bfish\b/i,
-    /\b(salmón|atún|bacalao|trucha|anchoa|merluza|caballa|pargo)\b/i,
+    /\b(salmón|atún|bacalao|trucha|anchoa|anchoas|merluza|caballa|pargo)\b/i,
     /\bpescado\b/i
   ],
   shellfish: [

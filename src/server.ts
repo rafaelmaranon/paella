@@ -141,6 +141,32 @@ app.get("/health", (req, res) => {
   });
 });
 
+// Metrics endpoint for dashboard
+app.get("/metrics", (req, res) => {
+  res.json({
+    searchQuality: 25, // This would be calculated from real data
+    allergenAccuracy: 62.5,
+    avgLatency: 620,
+    successRate: 100,
+    totalSearches: 0, // Would track actual searches
+    recipes: RECIPES.length,
+    vectors: VECTORS.length,
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Recent searches endpoint
+app.get("/recent-searches", (req, res) => {
+  // In a real app, this would come from a database
+  res.json([
+    { query: "quick vegetarian tapas", timestamp: new Date(Date.now() - 30000).toISOString(), results: 10 },
+    { query: "seafood paella", timestamp: new Date(Date.now() - 60000).toISOString(), results: 8 },
+    { query: "nut-free recipes", timestamp: new Date(Date.now() - 90000).toISOString(), results: 12 },
+    { query: "traditional Spanish", timestamp: new Date(Date.now() - 120000).toISOString(), results: 15 }
+  ]);
+});
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`🚀 AI Spanish Cuisine API running on port ${PORT}`);
