@@ -196,7 +196,7 @@ const paelleraSizes = {
     100: { thin: 'X', medium: '130 cm', full: '115 cm' }
 };
 
-// Tapas data - 100 authentic Andalusian tapas recipes
+// Tapas data - 100 authentic Andalusian tapas recipes with images
 const tapasData = [
     {
         id: 1,
@@ -205,7 +205,8 @@ const tapasData = [
         ingredients: ["jamón ibérico", "olive oil"],
         allergens: ["dairy"],
         category: "meat",
-        region: "Andalusia"
+        region: "Andalusia",
+        image: "https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     },
     {
         id: 2,
@@ -214,7 +215,8 @@ const tapasData = [
         ingredients: ["green olives", "garlic", "oregano", "olive oil", "vinegar"],
         allergens: [],
         category: "vegetables",
-        region: "Andalusia"
+        region: "Andalusia",
+        image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     },
     {
         id: 3,
@@ -223,7 +225,8 @@ const tapasData = [
         ingredients: ["potatoes", "eggs", "onion", "olive oil", "salt"],
         allergens: ["eggs"],
         category: "eggs",
-        region: "Andalusia"
+        region: "Andalusia",
+        image: "https://images.unsplash.com/photo-1572441713132-51c75654db73?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     },
     {
         id: 4,
@@ -232,7 +235,8 @@ const tapasData = [
         ingredients: ["shrimp", "garlic", "olive oil", "chili pepper", "parsley"],
         allergens: ["seafood"],
         category: "seafood",
-        region: "Andalusia"
+        region: "Andalusia",
+        image: "https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     },
     {
         id: 5,
@@ -241,7 +245,8 @@ const tapasData = [
         ingredients: ["potatoes", "tomato sauce", "garlic", "olive oil", "paprika"],
         allergens: ["eggs"],
         category: "vegetables",
-        region: "Andalusia"
+        region: "Andalusia",
+        image: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     },
     {
         id: 6,
@@ -250,7 +255,8 @@ const tapasData = [
         ingredients: ["jamón", "flour", "milk", "eggs", "breadcrumbs", "butter"],
         allergens: ["gluten", "dairy", "eggs"],
         category: "meat",
-        region: "Andalusia"
+        region: "Andalusia",
+        image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     },
     {
         id: 7,
@@ -259,7 +265,8 @@ const tapasData = [
         ingredients: ["anchovies", "vinegar", "garlic", "parsley", "olive oil"],
         allergens: ["seafood"],
         category: "seafood",
-        region: "Andalusia"
+        region: "Andalusia",
+        image: "https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     },
     {
         id: 8,
@@ -268,7 +275,8 @@ const tapasData = [
         ingredients: ["padrón peppers", "olive oil", "sea salt"],
         allergens: [],
         category: "vegetables",
-        region: "Andalusia"
+        region: "Andalusia",
+        image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     },
     {
         id: 9,
@@ -277,7 +285,8 @@ const tapasData = [
         ingredients: ["chorizo", "cider", "onion"],
         allergens: ["dairy"],
         category: "meat",
-        region: "Andalusia"
+        region: "Andalusia",
+        image: "https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     },
     {
         id: 10,
@@ -286,7 +295,8 @@ const tapasData = [
         ingredients: ["potatoes", "tuna", "carrots", "peas", "mayonnaise", "eggs"],
         allergens: ["eggs", "seafood"],
         category: "salad",
-        region: "Andalusia"
+        region: "Andalusia",
+        image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     }
     // ... (continuing with all 100 tapas - truncated for brevity)
 ];
@@ -803,20 +813,23 @@ function updateTapasResults() {
         ).join('');
 
         html += `
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
-                <div class="flex justify-between items-start mb-3">
-                    <h4 class="text-lg font-semibold text-gray-900">${tapa.name}</h4>
-                    <span class="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full capitalize">${tapa.category}</span>
-                </div>
-                <p class="text-gray-700 mb-3">${tapa.description}</p>
-                <div class="text-sm text-gray-600 mb-3">
-                    <strong>Ingredients:</strong> ${tapa.ingredients.join(', ')}
-                </div>
-                ${tapa.allergens.length > 0 ? `
-                    <div class="text-sm">
-                        <strong class="text-gray-700">Contains:</strong> ${allergenBadges}
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200">
+                <div class="h-48 bg-cover bg-center" style="background-image: url('${tapa.image}')"></div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-3">
+                        <h4 class="text-lg font-semibold text-gray-900">${tapa.name}</h4>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full capitalize">${tapa.category}</span>
                     </div>
-                ` : ''}
+                    <p class="text-gray-700 mb-3">${tapa.description}</p>
+                    <div class="text-sm text-gray-600 mb-3">
+                        <strong>Ingredients:</strong> ${tapa.ingredients.join(', ')}
+                    </div>
+                    ${tapa.allergens.length > 0 ? `
+                        <div class="text-sm">
+                            <strong class="text-gray-700">Contains:</strong> ${allergenBadges}
+                        </div>
+                    ` : ''}
+                </div>
             </div>
         `;
     });
