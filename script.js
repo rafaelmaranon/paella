@@ -1096,11 +1096,13 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initializeApp() {
+    console.log('Initializing app...');
     setupEventListeners();
     updateIngredients();
     updateRecipe();
     updatePaelleraSize();
     updateTapasResults();
+    console.log('App initialized successfully');
 }
 
 function setupEventListeners() {
@@ -1400,7 +1402,10 @@ function formatNumber(num) {
 // Tapas search and filtering functions
 function updateTapasResults() {
     const tapasResults = document.getElementById('tapasResults');
-    if (!tapasResults) return;
+    if (!tapasResults) {
+        console.log('Tapas results element not found');
+        return;
+    }
 
     let filteredTapas = tapasData;
 
