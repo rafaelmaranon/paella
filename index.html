@@ -5,275 +5,382 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spanish Cuisine Master - Paella & Tapas Guide</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>">
-    <link rel="stylesheet" href="styles.css">
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Framer Motion -->
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    
+    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'paella-orange': '#ff6b35',
+                        'paella-gold': '#f7931e',
+                    },
+                    fontFamily: {
+                        'cooking': ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .cooking-mode {
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+        .cooking-mode .text-sm { font-size: 1rem; }
+        .cooking-mode .text-base { font-size: 1.2rem; }
+        .cooking-mode .text-lg { font-size: 1.4rem; }
+        .cooking-mode .text-xl { font-size: 1.6rem; }
+        .cooking-mode .text-2xl { font-size: 1.8rem; }
+        .cooking-mode .text-3xl { font-size: 2.2rem; }
+    </style>
 </head>
-<body>
-    <div class="app-container">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <div class="logo">
-                    <i class="fas fa-mortar-pestle paella-icon"></i>
-                    <h1>Spanish Cuisine Master</h1>
+<body class="bg-gray-50 font-cooking">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-paella-orange to-paella-gold text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-mortar-pestle text-2xl"></i>
+                    <h1 class="text-2xl font-bold">Spanish Cuisine Master</h1>
                 </div>
-                <div class="measurement-toggle">
-                    <button id="metricBtn" class="measurement-btn active">Metric</button>
-                    <button id="imperialBtn" class="measurement-btn">US</button>
+                <div class="flex items-center space-x-4">
+                    <!-- Measurement Toggle -->
+                    <div class="flex bg-white/20 rounded-full p-1">
+                        <button id="metricBtn" class="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white text-paella-orange">Metric</button>
+                        <button id="imperialBtn" class="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 text-white hover:bg-white/10">US</button>
+                    </div>
+                    <!-- Cooking Mode Toggle -->
+                    <button id="cookingModeBtn" class="flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-full transition-all duration-200">
+                        <i class="fas fa-eye text-sm"></i>
+                        <span class="text-sm font-medium">Cooking Mode</span>
+                    </button>
                 </div>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <!-- Main Navigation -->
-        <nav class="main-nav">
-            <button class="nav-btn active" data-section="overview">
-                <i class="fas fa-info-circle"></i>
-                <span>Overview</span>
-            </button>
-            <button class="nav-btn" data-section="ingredients">
-                <i class="fas fa-list-ul"></i>
-                <span>Ingredients</span>
-            </button>
-            <button class="nav-btn" data-section="recipe">
-                <i class="fas fa-clipboard-list"></i>
-                <span>Recipe</span>
-            </button>
-            <button class="nav-btn" data-section="tapas">
-                <i class="fas fa-wine-glass-alt"></i>
-                <span>Tapas</span>
-            </button>
-        </nav>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b sticky top-16 z-40">
+        <div class="container mx-auto px-4">
+            <div class="flex space-x-1">
+                <button class="nav-btn active flex-1 flex flex-col items-center py-4 px-2 text-gray-600 hover:text-paella-orange transition-colors duration-200" data-section="overview">
+                    <i class="fas fa-info-circle text-xl mb-1"></i>
+                    <span class="text-sm font-medium">Overview</span>
+                </button>
+                <button class="nav-btn flex-1 flex flex-col items-center py-4 px-2 text-gray-600 hover:text-paella-orange transition-colors duration-200" data-section="ingredients">
+                    <i class="fas fa-list-ul text-xl mb-1"></i>
+                    <span class="text-sm font-medium">Ingredients</span>
+                </button>
+                <button class="nav-btn flex-1 flex flex-col items-center py-4 px-2 text-gray-600 hover:text-paella-orange transition-colors duration-200" data-section="recipe">
+                    <i class="fas fa-clipboard-list text-xl mb-1"></i>
+                    <span class="text-sm font-medium">Recipe</span>
+                </button>
+                <button class="nav-btn flex-1 flex flex-col items-center py-4 px-2 text-gray-600 hover:text-paella-orange transition-colors duration-200" data-section="tapas">
+                    <i class="fas fa-wine-glass-alt text-xl mb-1"></i>
+                    <span class="text-sm font-medium">Tapas</span>
+                </button>
+            </div>
+        </div>
+    </nav>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Overview Section -->
-            <section id="overview" class="content-section active">
-                <div class="section-header">
-                    <h2>Paella Overview</h2>
-                </div>
-                
-                <div class="expandable-sections">
-                    <div class="expandable-section">
-                        <button class="section-toggle" data-target="history">
-                            <i class="fas fa-landmark"></i>
-                            <span>Heritage</span>
-                            <i class="fas fa-chevron-down toggle-icon"></i>
-                        </button>
-                        <div class="section-content" id="history">
-                            <div class="history-content">
-                                <h3>The Story of Paella</h3>
-                                <p>Paella originated in the Valencia region of Spain in the 19th century. Farmers and laborers would cook rice with whatever ingredients they had available - typically rabbit, chicken, beans, and vegetables - in a large flat pan over an open fire.</p>
-                                
-                                <p>The dish gets its name from the pan it's cooked in - "paella" means "pan" in Valencian. What started as a humble peasant dish has become one of Spain's most iconic culinary exports.</p>
-                                
-                                <h4>Paella in the United States</h4>
-                                <p>Today, paella has gained tremendous popularity in the United States, becoming a favorite at restaurants, food festivals, and home kitchens. The dish's communal nature and impressive presentation make it perfect for gatherings and celebrations.</p>
-                                
-                                <div class="guinness-record">
-                                    <h4>🏆 Guinness World Record: The Largest Paella in the World</h4>
-                                    <p>In 2019, Galbis, a Spanish company, set the Guinness World Record for creating the largest paella ever made. This incredible feat took place in Valencia, Spain, and required:</p>
-                                    <ul>
-                                        <li>Over 1,200 kg of rice</li>
-                                        <li>2,400 kg of chicken</li>
-                                        <li>1,200 kg of rabbit</li>
-                                        <li>600 kg of green beans</li>
-                                        <li>300 kg of tomatoes</li>
-                                        <li>A massive 20-meter diameter paella pan</li>
-                                    </ul>
-                                    <p>This record-breaking paella could feed over 110,000 people and showcased the incredible scale and community spirit that paella represents.</p>
-                                    <div class="record-links">
-                                        <a href="https://galbis.com/record-guiness-galbis-paellas-gigantes" target="_blank" class="external-link">
-                                            <i class="fas fa-external-link-alt"></i> Learn more about the record
-                                        </a>
-                                        <a href="https://youtu.be/h7WOVipSOvU" target="_blank" class="external-link">
-                                            <i class="fab fa-youtube"></i> Watch the video
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="expandable-section">
-                        <button class="section-toggle" data-target="vocabulary">
-                            <i class="fas fa-language"></i>
-                            <span>Vocabulary</span>
-                            <i class="fas fa-chevron-down toggle-icon"></i>
-                        </button>
-                        <div class="section-content" id="vocabulary">
-                            <div class="vocabulary-content">
-                                <h3>Essential Paella Terms</h3>
-                                <div class="vocab-grid">
-                                    <div class="vocab-item">
-                                        <strong>Paella</strong>
-                                        <span>The pan used for cooking, also the name of the dish</span>
-                                    </div>
-                                    <div class="vocab-item">
-                                        <strong>Paellera</strong>
-                                        <span>Another term for the paella pan</span>
-                                    </div>
-                                    <div class="vocab-item">
-                                        <strong>Socarrat</strong>
-                                        <span>The crispy, caramelized rice at the bottom of the pan</span>
-                                    </div>
-                                    <div class="vocab-item">
-                                        <strong>Bomba Rice</strong>
-                                        <span>Short-grain rice traditionally used in paella</span>
-                                    </div>
-                                    <div class="vocab-item">
-                                        <strong>Azafrán</strong>
-                                        <span>Saffron - the precious spice that gives paella its golden color</span>
-                                    </div>
-                                    <div class="vocab-item">
-                                        <strong>Caldo</strong>
-                                        <span>Broth or stock used to cook the rice</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="expandable-section">
-                        <button class="section-toggle" data-target="learn-more">
-                            <i class="fas fa-external-link-alt"></i>
-                            <span>Learn More</span>
-                            <i class="fas fa-chevron-down toggle-icon"></i>
-                        </button>
-                        <div class="section-content" id="learn-more">
-                            <div class="learn-more-content">
-                                <h3>Resources & Learning</h3>
-                                
-                                <div class="resource-category">
-                                    <h4>🇺🇸 United States Resources</h4>
-                                    <div class="resource-item">
-                                        <h5>Chef José Andrés - Little Spain</h5>
-                                        <p>World-renowned Spanish chef with restaurants across the US</p>
-                                        <a href="https://www.littlespain.com/paella/" target="_blank" class="resource-link">
-                                            <i class="fas fa-external-link-alt"></i> Visit Little Spain
-                                        </a>
-                                        <p class="resource-note">José Andrés also has excellent videos with his daughter exploring Spanish tapas on Prime Video</p>
-                                    </div>
-                                </div>
-
-                                <div class="resource-category">
-                                    <h4>🇪🇸 Spain Resources</h4>
-                                    <div class="resource-item">
-                                        <h5>Chef Amadeo</h5>
-                                        <p>Expert Spanish chef with comprehensive paella tutorials</p>
-                                        <a href="https://www.chefamadeo.com/en/home/" target="_blank" class="resource-link">
-                                            <i class="fas fa-external-link-alt"></i> Visit Chef Amadeo
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <div class="resource-category">
-                                    <h4>📚 Additional Learning</h4>
-                                    <ul class="learning-list">
-                                        <li>Traditional Valencian paella techniques</li>
-                                        <li>Seafood paella preparation methods</li>
-                                        <li>Proper rice cooking techniques</li>
-                                        <li>Creating the perfect socarrat</li>
-                                        <li>Paella pan selection and care</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Ingredients Section -->
-            <section id="ingredients" class="content-section">
-                <div class="section-header">
-                    <h2>Ingredients & Calculator</h2>
-                </div>
-
-                <div class="ingredients-controls">
-                    <div class="people-selector">
-                        <label for="peopleCount">Number of People:</label>
-                        <input type="number" id="peopleCount" min="1" max="100" value="4">
-                    </div>
-
-                    <div class="paella-type-selector">
-                        <label>Paella Type:</label>
-                        <div class="type-buttons">
-                            <button class="type-btn active" data-type="valenciana">
-                                <i class="fas fa-seedling"></i>
-                                <span>Valenciana</span>
-                            </button>
-                            <button class="type-btn" data-type="seafood">
-                                <i class="fas fa-fish"></i>
-                                <span>Seafood & Meat</span>
-                            </button>
-                            <button class="type-btn" data-type="squid-ink">
-                                <i class="fas fa-magic"></i>
-                                <span>Squid Ink</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="paella-overview" id="paellaOverview">
-                    <h3>Valenciana Paella</h3>
-                    <p>The traditional paella from Valencia, made with chicken, rabbit, green beans, and white beans. This is the original paella recipe that started it all.</p>
-                </div>
-
-                <div class="ingredients-list" id="ingredientsList">
-                    <!-- Ingredients will be populated by JavaScript -->
-                </div>
-
-                <div class="paellera-calculator">
-                    <h3>Paellera Size Calculator</h3>
-                    <div class="calculator-result" id="paelleraSize">
-                        <!-- Paellera size will be calculated by JavaScript -->
-                    </div>
-                </div>
-            </section>
-
-            <!-- Recipe Section -->
-            <section id="recipe" class="content-section">
-                <div class="section-header">
-                    <h2>Cooking Process</h2>
-                </div>
-
-                <div class="recipe-steps" id="recipeSteps">
-                    <!-- Recipe steps will be populated by JavaScript -->
-                </div>
-            </section>
-
-            <!-- Tapas Section -->
-            <section id="tapas" class="content-section">
-                <div class="section-header">
-                    <h2>Andalusian Tapas Collection</h2>
-                    <p>Discover 100 authentic tapas recipes from Andalusia, Spain</p>
-                </div>
-
-                <div class="tapas-search-container">
-                    <div class="search-controls">
-                        <div class="search-input-group">
-                            <i class="fas fa-search"></i>
-                            <input type="text" id="tapasSearch" placeholder="Search by ingredients (e.g., 'olives', 'cheese', 'seafood')">
-                        </div>
+    <!-- Main Content -->
+    <main class="min-h-screen">
+        <!-- Hero Section -->
+        <section id="hero" class="relative h-96 bg-cover bg-center bg-no-repeat" style="background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+            <div class="relative h-full flex items-end">
+                <div class="container mx-auto px-4 pb-8">
+                    <div class="max-w-4xl">
+                        <h2 class="text-4xl md:text-5xl font-bold text-white mb-4" id="heroTitle">Authentic Spanish Paella</h2>
+                        <p class="text-xl text-white/90 mb-6" id="heroDescription">Traditional Valencian paella with chicken, rabbit, and fresh vegetables</p>
                         
-                        <div class="allergen-filters">
-                            <h4>Filter by Allergies:</h4>
-                            <div class="allergen-buttons">
-                                <button class="allergen-btn" data-allergen="gluten">Gluten-Free</button>
-                                <button class="allergen-btn" data-allergen="dairy">Dairy-Free</button>
-                                <button class="allergen-btn" data-allergen="nuts">Nut-Free</button>
-                                <button class="allergen-btn" data-allergen="seafood">Seafood-Free</button>
-                                <button class="allergen-btn" data-allergen="eggs">Egg-Free</button>
+                        <!-- Metadata Chips -->
+                        <div class="flex flex-wrap gap-3">
+                            <div class="flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                                <i class="fas fa-clock text-white"></i>
+                                <span class="text-white font-medium" id="cookingTime">45 min</span>
+                            </div>
+                            <div class="flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                                <i class="fas fa-users text-white"></i>
+                                <span class="text-white font-medium" id="servings">4 servings</span>
+                            </div>
+                            <div class="flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                                <i class="fas fa-signal text-white"></i>
+                                <span class="text-white font-medium" id="difficulty">Intermediate</span>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <div class="tapas-results" id="tapasResults">
-                    <!-- Tapas recipes will be populated by JavaScript -->
+        <!-- Overview Section -->
+        <section id="overview" class="content-section py-12">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-8">Paella Overview</h2>
+                    
+                    <!-- Expandable Sections -->
+                    <div class="space-y-4">
+                        <!-- Heritage Section -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                            <button class="section-toggle w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors duration-200" data-target="heritage">
+                                <div class="flex items-center space-x-4">
+                                    <i class="fas fa-landmark text-paella-orange text-xl"></i>
+                                    <span class="text-lg font-semibold text-gray-900">Heritage</span>
+                                </div>
+                                <i class="fas fa-chevron-down toggle-icon text-gray-400 transition-transform duration-200"></i>
+                            </button>
+                            <div class="section-content hidden px-6 pb-6" id="heritage">
+                                <div class="prose max-w-none">
+                                    <h3 class="text-xl font-semibold text-gray-900 mb-4">The Story of Paella</h3>
+                                    <p class="text-gray-700 mb-4">Paella originated in the Valencia region of Spain in the 19th century. Farmers and laborers would cook rice with whatever ingredients they had available - typically rabbit, chicken, beans, and vegetables - in a large flat pan over an open fire.</p>
+                                    <p class="text-gray-700 mb-4">The dish gets its name from the pan it's cooked in - "paella" means "pan" in Valencian. What started as a humble peasant dish has become one of Spain's most iconic culinary exports.</p>
+                                    
+                                    <h4 class="text-lg font-semibold text-gray-900 mb-3">Paella in the United States</h4>
+                                    <p class="text-gray-700 mb-4">Today, paella has gained tremendous popularity in the United States, becoming a favorite at restaurants, food festivals, and home kitchens. The dish's communal nature and impressive presentation make it perfect for gatherings and celebrations.</p>
+                                    
+                                    <div class="bg-gradient-to-r from-paella-orange/10 to-paella-gold/10 p-6 rounded-lg border-l-4 border-paella-orange">
+                                        <h4 class="text-lg font-semibold text-gray-900 mb-3">🏆 Guinness World Record: The Largest Paella in the World</h4>
+                                        <p class="text-gray-700 mb-4">In 2019, Galbis, a Spanish company, set the Guinness World Record for creating the largest paella ever made. This incredible feat took place in Valencia, Spain, and required:</p>
+                                        <ul class="list-disc list-inside text-gray-700 mb-4 space-y-1">
+                                            <li>Over 1,200 kg of rice</li>
+                                            <li>2,400 kg of chicken</li>
+                                            <li>1,200 kg of rabbit</li>
+                                            <li>600 kg of green beans</li>
+                                            <li>300 kg of tomatoes</li>
+                                            <li>A massive 20-meter diameter paella pan</li>
+                                        </ul>
+                                        <p class="text-gray-700 mb-4">This record-breaking paella could feed over 110,000 people and showcased the incredible scale and community spirit that paella represents.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Vocabulary Section -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                            <button class="section-toggle w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors duration-200" data-target="vocabulary">
+                                <div class="flex items-center space-x-4">
+                                    <i class="fas fa-language text-paella-orange text-xl"></i>
+                                    <span class="text-lg font-semibold text-gray-900">Vocabulary</span>
+                                </div>
+                                <i class="fas fa-chevron-down toggle-icon text-gray-400 transition-transform duration-200"></i>
+                            </button>
+                            <div class="section-content hidden px-6 pb-6" id="vocabulary">
+                                <div class="prose max-w-none">
+                                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Essential Paella Terms</h3>
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        <div class="bg-gray-50 p-4 rounded-lg">
+                                            <strong class="text-paella-orange block mb-2">Paella</strong>
+                                            <span class="text-gray-700">The pan used for cooking, also the name of the dish</span>
+                                        </div>
+                                        <div class="bg-gray-50 p-4 rounded-lg">
+                                            <strong class="text-paella-orange block mb-2">Paellera</strong>
+                                            <span class="text-gray-700">Another term for the paella pan</span>
+                                        </div>
+                                        <div class="bg-gray-50 p-4 rounded-lg">
+                                            <strong class="text-paella-orange block mb-2">Socarrat</strong>
+                                            <span class="text-gray-700">The crispy, caramelized rice at the bottom of the pan</span>
+                                        </div>
+                                        <div class="bg-gray-50 p-4 rounded-lg">
+                                            <strong class="text-paella-orange block mb-2">Bomba Rice</strong>
+                                            <span class="text-gray-700">Short-grain rice traditionally used in paella</span>
+                                        </div>
+                                        <div class="bg-gray-50 p-4 rounded-lg">
+                                            <strong class="text-paella-orange block mb-2">Azafrán</strong>
+                                            <span class="text-gray-700">Saffron - the precious spice that gives paella its golden color</span>
+                                        </div>
+                                        <div class="bg-gray-50 p-4 rounded-lg">
+                                            <strong class="text-paella-orange block mb-2">Caldo</strong>
+                                            <span class="text-gray-700">Broth or stock used to cook the rice</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Learn More Section -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                            <button class="section-toggle w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors duration-200" data-target="learn-more">
+                                <div class="flex items-center space-x-4">
+                                    <i class="fas fa-external-link-alt text-paella-orange text-xl"></i>
+                                    <span class="text-lg font-semibold text-gray-900">Learn More</span>
+                                </div>
+                                <i class="fas fa-chevron-down toggle-icon text-gray-400 transition-transform duration-200"></i>
+                            </button>
+                            <div class="section-content hidden px-6 pb-6" id="learn-more">
+                                <div class="prose max-w-none">
+                                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Resources & Learning</h3>
+                                    
+                                    <div class="space-y-6">
+                                        <div>
+                                            <h4 class="text-lg font-semibold text-gray-900 mb-3">🇺🇸 United States Resources</h4>
+                                            <div class="bg-gray-50 p-4 rounded-lg">
+                                                <h5 class="font-semibold text-paella-orange mb-2">Chef José Andrés - Little Spain</h5>
+                                                <p class="text-gray-700 mb-3">World-renowned Spanish chef with restaurants across the US</p>
+                                                <a href="https://www.littlespain.com/paella/" target="_blank" class="inline-flex items-center space-x-2 text-paella-orange hover:text-paella-gold transition-colors duration-200">
+                                                    <i class="fas fa-external-link-alt text-sm"></i>
+                                                    <span class="font-medium">Visit Little Spain</span>
+                                                </a>
+                                                <p class="text-sm text-gray-600 mt-2 italic">José Andrés also has excellent videos with his daughter exploring Spanish tapas on Prime Video</p>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <h4 class="text-lg font-semibold text-gray-900 mb-3">🇪🇸 Spain Resources</h4>
+                                            <div class="bg-gray-50 p-4 rounded-lg">
+                                                <h5 class="font-semibold text-paella-orange mb-2">Chef Amadeo</h5>
+                                                <p class="text-gray-700 mb-3">Expert Spanish chef with comprehensive paella tutorials</p>
+                                                <a href="https://www.chefamadeo.com/en/home/" target="_blank" class="inline-flex items-center space-x-2 text-paella-orange hover:text-paella-gold transition-colors duration-200">
+                                                    <i class="fas fa-external-link-alt text-sm"></i>
+                                                    <span class="font-medium">Visit Chef Amadeo</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </section>
-        </main>
-    </div>
+            </div>
+        </section>
+
+        <!-- Ingredients Section -->
+        <section id="ingredients" class="content-section hidden py-12">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-8">Ingredients & Calculator</h2>
+                    
+                    <!-- Controls -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- People Selector -->
+                            <div>
+                                <label for="peopleCount" class="block text-sm font-medium text-gray-700 mb-2">Number of People:</label>
+                                <input type="number" id="peopleCount" min="1" max="100" value="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-paella-orange focus:border-transparent transition-all duration-200">
+                            </div>
+                            
+                            <!-- Paella Type Selector -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Paella Type:</label>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button class="type-btn active flex flex-col items-center p-3 border-2 border-paella-orange bg-paella-orange/10 text-paella-orange rounded-lg transition-all duration-200" data-type="valenciana">
+                                        <i class="fas fa-seedling text-xl mb-2"></i>
+                                        <span class="text-sm font-medium">Valenciana</span>
+                                    </button>
+                                    <button class="type-btn flex flex-col items-center p-3 border-2 border-gray-300 text-gray-600 hover:border-paella-orange hover:text-paella-orange rounded-lg transition-all duration-200" data-type="seafood">
+                                        <i class="fas fa-fish text-xl mb-2"></i>
+                                        <span class="text-sm font-medium">Seafood</span>
+                                    </button>
+                                    <button class="type-btn flex flex-col items-center p-3 border-2 border-gray-300 text-gray-600 hover:border-paella-orange hover:text-paella-orange rounded-lg transition-all duration-200" data-type="squid-ink">
+                                        <i class="fas fa-magic text-xl mb-2"></i>
+                                        <span class="text-sm font-medium">Squid Ink</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Paella Overview -->
+                    <div class="bg-gradient-to-r from-paella-orange to-paella-gold text-white rounded-xl p-6 mb-8" id="paellaOverview">
+                        <h3 class="text-2xl font-bold mb-2">Valenciana Paella</h3>
+                        <p class="text-white/90">The traditional paella from Valencia, made with chicken, rabbit, green beans, and white beans. This is the original paella recipe that started it all.</p>
+                    </div>
+
+                    <!-- Ingredients Checklist -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-6">Ingredients Checklist</h3>
+                        <div id="ingredientsList" class="space-y-3">
+                            <!-- Ingredients will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Paellera Calculator -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4">Paellera Size Calculator</h3>
+                        <div id="paelleraSize" class="bg-gray-50 p-4 rounded-lg">
+                            <!-- Paellera size will be calculated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recipe Section -->
+        <section id="recipe" class="content-section hidden py-12">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-8">Cooking Process</h2>
+                    
+                    <!-- Video Section (Optional) -->
+                    <div id="videoSection" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8 hidden">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4">Cooking Video</h3>
+                        <div class="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
+                            <p class="text-gray-500">Video placeholder - Add your cooking video here</p>
+                        </div>
+                    </div>
+
+                    <!-- Recipe Steps Checklist -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-6">Step-by-Step Instructions</h3>
+                        <div id="recipeSteps" class="space-y-4">
+                            <!-- Recipe steps will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tapas Section -->
+        <section id="tapas" class="content-section hidden py-12">
+            <div class="container mx-auto px-4">
+                <div class="max-w-6xl mx-auto">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Andalusian Tapas Collection</h2>
+                    <p class="text-gray-600 mb-8">Discover 100 authentic tapas recipes from Andalusia, Spain</p>
+
+                    <!-- Search and Filters -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+                        <div class="space-y-6">
+                            <!-- Search Input -->
+                            <div class="relative">
+                                <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                <input type="text" id="tapasSearch" placeholder="Search by ingredients (e.g., 'olives', 'cheese', 'seafood')" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-paella-orange focus:border-transparent transition-all duration-200">
+                            </div>
+                            
+                            <!-- Allergen Filters -->
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-700 mb-3">Filter by Allergies:</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <button class="allergen-btn px-4 py-2 border-2 border-gray-300 text-gray-600 rounded-full hover:border-paella-orange hover:text-paella-orange transition-all duration-200" data-allergen="gluten">Gluten-Free</button>
+                                    <button class="allergen-btn px-4 py-2 border-2 border-gray-300 text-gray-600 rounded-full hover:border-paella-orange hover:text-paella-orange transition-all duration-200" data-allergen="dairy">Dairy-Free</button>
+                                    <button class="allergen-btn px-4 py-2 border-2 border-gray-300 text-gray-600 rounded-full hover:border-paella-orange hover:text-paella-orange transition-all duration-200" data-allergen="nuts">Nut-Free</button>
+                                    <button class="allergen-btn px-4 py-2 border-2 border-gray-300 text-gray-600 rounded-full hover:border-paella-orange hover:text-paella-orange transition-all duration-200" data-allergen="seafood">Seafood-Free</button>
+                                    <button class="allergen-btn px-4 py-2 border-2 border-gray-300 text-gray-600 rounded-full hover:border-paella-orange hover:text-paella-orange transition-all duration-200" data-allergen="eggs">Egg-Free</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tapas Results -->
+                    <div id="tapasResults" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Tapas recipes will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <script src="script.js"></script>
 </body>
