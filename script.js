@@ -911,8 +911,8 @@ async function performAISearch() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        const data = await response.json();
-        displayAISearchResults(data.results);
+                            const data = await response.json();
+                    displayAISearchResults(data.results, query);
         
     } catch (error) {
         console.error('AI Search error:', error);
@@ -927,7 +927,7 @@ async function performAISearch() {
     }
 }
 
-function displayAISearchResults(results) {
+function displayAISearchResults(results, query) {
     const resultsDiv = document.getElementById('aiSearchResults');
     
     if (!results || results.length === 0) {
@@ -991,10 +991,10 @@ function displayAISearchResults(results) {
                                 <div class="flex items-center justify-between">
                                     <span class="text-sm text-gray-600">Was this result helpful?</span>
                                     <div class="flex gap-2">
-                                        <button onclick="submitFeedback('${recipe.id}', 'helpful', '${query}')" class="px-3 py-1 text-sm bg-green-100 text-green-700 rounded-full hover:bg-green-200 transition-colors">
+                                        <button onclick="submitFeedback('${recipe.id}', 'helpful', '${query.replace(/'/g, "\\'")}')" class="px-3 py-1 text-sm bg-green-100 text-green-700 rounded-full hover:bg-green-200 transition-colors">
                                             <i class="fas fa-thumbs-up mr-1"></i>Helpful
                                         </button>
-                                        <button onclick="submitFeedback('${recipe.id}', 'not_helpful', '${query}')" class="px-3 py-1 text-sm bg-red-100 text-red-700 rounded-full hover:bg-red-200 transition-colors">
+                                        <button onclick="submitFeedback('${recipe.id}', 'not_helpful', '${query.replace(/'/g, "\\'")}')" class="px-3 py-1 text-sm bg-red-100 text-red-700 rounded-full hover:bg-red-200 transition-colors">
                                             <i class="fas fa-thumbs-down mr-1"></i>Not Helpful
                                         </button>
                                     </div>
