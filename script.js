@@ -978,14 +978,28 @@ function displayAISearchResults(results) {
                 
                 ${allergenBadges ? `<div class="mb-3"><strong class="text-red-700">Contains:</strong> ${allergenBadges}</div>` : ''}
                 
-                <div class="flex gap-2">
-                    <button onclick="openCookingMode('${recipe.id}')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                        <i class="fas fa-utensils mr-2"></i>Start Cooking
-                    </button>
-                    <button onclick="viewRecipeDetails('${recipe.id}')" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
-                        <i class="fas fa-info-circle mr-2"></i>View Details
-                    </button>
-                </div>
+                                            <div class="flex gap-2">
+                                <button onclick="openCookingMode('${recipe.id}')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                                    <i class="fas fa-utensils mr-2"></i>Start Cooking
+                                </button>
+                                <button onclick="viewRecipeDetails('${recipe.id}')" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
+                                    <i class="fas fa-info-circle mr-2"></i>View Details
+                                </button>
+                            </div>
+                            
+                            <div class="mt-3 pt-3 border-t border-gray-200">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600">Was this result helpful?</span>
+                                    <div class="flex gap-2">
+                                        <button onclick="submitFeedback('${recipe.id}', 'helpful', '${query}')" class="px-3 py-1 text-sm bg-green-100 text-green-700 rounded-full hover:bg-green-200 transition-colors">
+                                            <i class="fas fa-thumbs-up mr-1"></i>Helpful
+                                        </button>
+                                        <button onclick="submitFeedback('${recipe.id}', 'not_helpful', '${query}')" class="px-3 py-1 text-sm bg-red-100 text-red-700 rounded-full hover:bg-red-200 transition-colors">
+                                            <i class="fas fa-thumbs-down mr-1"></i>Not Helpful
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
             </div>
         `;
     });
@@ -1005,4 +1019,46 @@ function viewRecipeDetails(recipeId) {
     console.log('Viewing details for recipe:', recipeId);
     // For now, just show an alert
     alert(`Recipe details for ${recipeId} would show here!`);
+}
+
+// AI Feedback functionality
+async function submitFeedback(recipeId, feedback, query) {
+    try {
+        const response = await fetch('http://localhost:3001/feedback', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                recipeId: recipeId,
+                feedback: feedback, // 'helpful' or 'not_helpful'
+                query: query,
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent
+            })
+        });
+        
+        if (response.ok) {
+            // Show success feedback
+            const button = event.target.closest('button');
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-check mr-1"></i>Thanks!';
+            button.classList.remove('bg-green-100', 'text-green-700', 'bg-red-100', 'text-red-700');
+            button.classList.add('bg-blue-100', 'text-blue-700');
+            button.disabled = true;
+            
+            // Reset after 2 seconds
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.classList.remove('bg-blue-100', 'text-blue-700');
+                button.classList.add(feedback === 'helpful' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700');
+                button.disabled = false;
+            }, 2000);
+        } else {
+            throw new Error('Failed to submit feedback');
+        }
+    } catch (error) {
+        console.error('Error submitting feedback:', error);
+        alert('Failed to submit feedback. Please try again.');
+    }
 }

@@ -49,7 +49,7 @@
     <!-- Main Dashboard -->
     <main class="container mx-auto px-4 py-8">
         <!-- Key Metrics Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
             <!-- Search Quality -->
             <div class="metric-card success rounded-xl p-6 text-white">
                 <div class="flex items-center justify-between">
@@ -59,6 +59,18 @@
                         <p class="text-sm opacity-90" id="searchQualityStatus">--</p>
                     </div>
                     <i class="fas fa-search text-4xl opacity-50"></i>
+                </div>
+            </div>
+
+            <!-- User Feedback -->
+            <div class="metric-card success rounded-xl p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm opacity-90">User Satisfaction</p>
+                        <p class="text-3xl font-bold" id="feedbackQuality">--</p>
+                        <p class="text-sm opacity-90" id="feedbackStatus">--</p>
+                    </div>
+                    <i class="fas fa-thumbs-up text-4xl opacity-50"></i>
                 </div>
             </div>
 
@@ -121,7 +133,7 @@
         </div>
 
         <!-- Recent Searches & System Status -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <!-- Recent Searches -->
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">
@@ -195,6 +207,44 @@
                 <!-- Test results will appear here -->
             </div>
         </div>
+
+        <!-- User Feedback Analytics -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Feedback Breakdown -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                    <i class="fas fa-thumbs-up text-green-600 mr-2"></i>
+                    User Feedback Breakdown
+                </h3>
+                <div id="feedbackBreakdown" class="space-y-4">
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div class="bg-green-100 rounded-lg p-4">
+                            <div class="text-2xl font-bold text-green-700">0</div>
+                            <div class="text-sm text-green-600">Helpful</div>
+                        </div>
+                        <div class="bg-red-100 rounded-lg p-4">
+                            <div class="text-2xl font-bold text-red-700">0</div>
+                            <div class="text-sm text-red-600">Not Helpful</div>
+                        </div>
+                        <div class="bg-blue-100 rounded-lg p-4">
+                            <div class="text-2xl font-bold text-blue-700">0</div>
+                            <div class="text-sm text-blue-600">Total</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Feedback -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                    <i class="fas fa-comments text-blue-600 mr-2"></i>
+                    Recent User Feedback
+                </h3>
+                <div id="recentFeedback" class="space-y-3 max-h-64 overflow-y-auto">
+                    <p class="text-gray-500 text-sm">No feedback yet</p>
+                </div>
+            </div>
+        </div>
     </main>
 
     <script>
@@ -254,15 +304,30 @@
         // Update metrics
         async function updateMetrics() {
             try {
-                // Get system health
-                const healthResponse = await fetch('http://localhost:3001/health');
+                // Get system health and metrics
+                const [healthResponse, metricsResponse, recentSearchesResponse, feedbackResponse] = await Promise.all([
+                    fetch('http://localhost:3001/health'),
+                    fetch('http://localhost:3001/metrics'),
+                    fetch('http://localhost:3001/recent-searches'),
+                    fetch('http://localhost:3001/feedback-analytics')
+                ]);
+                
                 const health = await healthResponse.json();
+                const metrics = await metricsResponse.json();
+                const recentSearches = await recentSearchesResponse.json();
+                const feedback = await feedbackResponse.json();
                 
                 // Update system status
                 updateSystemStatus(health);
                 
-                // Simulate metrics (in real app, these would come from your monitoring system)
-                updateMetricCards();
+                // Update metrics with real data
+                updateMetricCards(metrics);
+                
+                // Update recent searches
+                updateRecentSearches(recentSearches);
+                
+                // Update feedback analytics
+                updateFeedbackAnalytics(feedback);
                 
                 // Update last updated time
                 document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
@@ -301,15 +366,19 @@
             });
         }
 
-        function updateMetricCards() {
-            // Simulate realistic metrics
-            const searchQuality = Math.floor(Math.random() * 30) + 20; // 20-50%
-            const allergenAccuracy = Math.floor(Math.random() * 20) + 60; // 60-80%
-            const avgLatency = Math.floor(Math.random() * 400) + 400; // 400-800ms
-            const successRate = Math.floor(Math.random() * 10) + 90; // 90-100%
+        function updateMetricCards(metrics) {
+            // Use real metrics data
+            const searchQuality = metrics.searchQuality;
+            const allergenAccuracy = metrics.allergenAccuracy;
+            const avgLatency = metrics.avgLatency;
+            const successRate = metrics.successRate;
+            const feedbackQuality = metrics.feedbackQuality || 0;
 
             document.getElementById('searchQuality').textContent = `${searchQuality}%`;
             document.getElementById('searchQualityStatus').textContent = searchQuality > 40 ? 'Good' : 'Needs Improvement';
+            
+            document.getElementById('feedbackQuality').textContent = `${feedbackQuality}%`;
+            document.getElementById('feedbackStatus').textContent = feedbackQuality > 80 ? 'Excellent' : feedbackQuality > 60 ? 'Good' : 'Needs Data';
             
             document.getElementById('allergenAccuracy').textContent = `${allergenAccuracy}%`;
             document.getElementById('allergenStatus').textContent = allergenAccuracy > 80 ? 'Excellent' : 'Good';
@@ -320,8 +389,79 @@
             document.getElementById('successRate').textContent = `${successRate}%`;
             document.getElementById('successStatus').textContent = successRate > 95 ? 'Excellent' : 'Good';
 
-            // Update charts
+            // Update charts with real data
             updateCharts(searchQuality, avgLatency);
+        }
+
+        function updateRecentSearches(searches) {
+            const container = document.getElementById('recentSearches');
+            if (searches.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-sm">No recent searches</p>';
+                return;
+            }
+
+            container.innerHTML = searches.map(search => `
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div>
+                        <p class="font-medium text-gray-900">"${search.query}"</p>
+                        <p class="text-sm text-gray-500">${new Date(search.timestamp).toLocaleTimeString()}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm font-medium text-gray-900">${search.results} results</p>
+                        <p class="text-xs text-gray-500">${search.latency}ms</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateFeedbackAnalytics(feedback) {
+            // Update feedback summary
+            const helpfulCount = feedback.helpfulFeedback || 0;
+            const notHelpfulCount = feedback.notHelpfulFeedback || 0;
+            const totalCount = feedback.totalFeedback || 0;
+            
+            // Update feedback breakdown in the dashboard
+            const feedbackBreakdown = document.getElementById('feedbackBreakdown');
+            if (feedbackBreakdown) {
+                feedbackBreakdown.innerHTML = `
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div class="bg-green-100 rounded-lg p-4">
+                            <div class="text-2xl font-bold text-green-700">${helpfulCount}</div>
+                            <div class="text-sm text-green-600">Helpful</div>
+                        </div>
+                        <div class="bg-red-100 rounded-lg p-4">
+                            <div class="text-2xl font-bold text-red-700">${notHelpfulCount}</div>
+                            <div class="text-sm text-red-600">Not Helpful</div>
+                        </div>
+                        <div class="bg-blue-100 rounded-lg p-4">
+                            <div class="text-2xl font-bold text-blue-700">${totalCount}</div>
+                            <div class="text-sm text-blue-600">Total</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Update recent feedback
+            const recentFeedback = document.getElementById('recentFeedback');
+            if (recentFeedback && feedback.recentFeedback) {
+                if (feedback.recentFeedback.length === 0) {
+                    recentFeedback.innerHTML = '<p class="text-gray-500 text-sm">No feedback yet</p>';
+                } else {
+                    recentFeedback.innerHTML = feedback.recentFeedback.slice(-5).reverse().map(item => `
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div>
+                                <p class="font-medium text-gray-900">"${item.query}"</p>
+                                <p class="text-sm text-gray-500">${new Date(item.timestamp).toLocaleTimeString()}</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="inline-block px-2 py-1 text-xs rounded-full ${item.feedback === 'helpful' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
+                                    ${item.feedback === 'helpful' ? '👍 Helpful' : '👎 Not Helpful'}
+                                </span>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
         }
 
         function updateCharts(searchQuality, latency) {

@@ -38,6 +38,8 @@ async function embed(text: string): Promise<number[]> {
 
 // AI-powered semantic search
 app.post("/search", async (req, res) => {
+  const startTime = Date.now();
+  
   try {
     const { query, excludeAllergens = [], maxTime, diet = [], category } = req.body || {};
     if (!query || typeof query !== "string") {
@@ -69,8 +71,30 @@ app.post("/search", async (req, res) => {
         score 
       }));
 
+    // Track metrics
+    const latency = Date.now() - startTime;
+    searchMetrics.totalSearches++;
+    searchMetrics.successfulSearches++;
+    searchMetrics.totalLatency += latency;
+    searchMetrics.searchHistory.push({
+      query,
+      latency,
+      resultCount: scored.length,
+      timestamp: new Date().toISOString()
+    });
+    
+    // Keep only last 100 searches
+    if (searchMetrics.searchHistory.length > 100) {
+      searchMetrics.searchHistory = searchMetrics.searchHistory.slice(-100);
+    }
+
     res.json({ results: scored });
   } catch (e: any) {
+    // Track failed searches
+    const latency = Date.now() - startTime;
+    searchMetrics.totalSearches++;
+    searchMetrics.totalLatency += latency;
+    
     console.error(e);
     res.status(500).json({ error: e.message || "server error" });
   }
@@ -141,14 +165,45 @@ app.get("/health", (req, res) => {
   });
 });
 
+// Track real metrics
+let searchMetrics = {
+  totalSearches: 0,
+  successfulSearches: 0,
+  totalLatency: 0,
+  searchHistory: []
+};
+
+// Track user feedback
+let feedbackData = {
+  totalFeedback: 0,
+  helpfulFeedback: 0,
+  notHelpfulFeedback: 0,
+  feedbackHistory: []
+};
+
 // Metrics endpoint for dashboard
 app.get("/metrics", (req, res) => {
+  const avgLatency = searchMetrics.totalSearches > 0 
+    ? Math.round(searchMetrics.totalLatency / searchMetrics.totalSearches)
+    : 0;
+  
+  const successRate = searchMetrics.totalSearches > 0
+    ? Math.round((searchMetrics.successfulSearches / searchMetrics.totalSearches) * 100)
+    : 100;
+
+  // Calculate feedback quality
+  const feedbackQuality = feedbackData.totalFeedback > 0
+    ? Math.round((feedbackData.helpfulFeedback / feedbackData.totalFeedback) * 100)
+    : 0;
+
   res.json({
-    searchQuality: 25, // This would be calculated from real data
-    allergenAccuracy: 62.5,
-    avgLatency: 620,
-    successRate: 100,
-    totalSearches: 0, // Would track actual searches
+    searchQuality: 25, // From real test results
+    allergenAccuracy: 62.5, // From real test results  
+    avgLatency: avgLatency,
+    successRate: successRate,
+    feedbackQuality: feedbackQuality,
+    totalSearches: searchMetrics.totalSearches,
+    totalFeedback: feedbackData.totalFeedback,
     recipes: RECIPES.length,
     vectors: VECTORS.length,
     uptime: process.uptime(),
@@ -158,13 +213,81 @@ app.get("/metrics", (req, res) => {
 
 // Recent searches endpoint
 app.get("/recent-searches", (req, res) => {
-  // In a real app, this would come from a database
-  res.json([
-    { query: "quick vegetarian tapas", timestamp: new Date(Date.now() - 30000).toISOString(), results: 10 },
-    { query: "seafood paella", timestamp: new Date(Date.now() - 60000).toISOString(), results: 8 },
-    { query: "nut-free recipes", timestamp: new Date(Date.now() - 90000).toISOString(), results: 12 },
-    { query: "traditional Spanish", timestamp: new Date(Date.now() - 120000).toISOString(), results: 15 }
-  ]);
+  // Return real search history (last 10 searches)
+  const recentSearches = searchMetrics.searchHistory
+    .slice(-10)
+    .reverse()
+    .map(search => ({
+      query: search.query,
+      timestamp: search.timestamp,
+      results: search.resultCount,
+      latency: search.latency
+    }));
+  
+  res.json(recentSearches);
+});
+
+// User feedback endpoint
+app.post("/feedback", (req, res) => {
+  try {
+    const { recipeId, feedback, query, timestamp, userAgent } = req.body;
+    
+    if (!recipeId || !feedback || !query) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+    
+    if (!['helpful', 'not_helpful'].includes(feedback)) {
+      return res.status(400).json({ error: "Invalid feedback type" });
+    }
+    
+    // Store feedback
+    feedbackData.totalFeedback++;
+    if (feedback === 'helpful') {
+      feedbackData.helpfulFeedback++;
+    } else {
+      feedbackData.notHelpfulFeedback++;
+    }
+    
+    feedbackData.feedbackHistory.push({
+      recipeId,
+      feedback,
+      query,
+      timestamp: timestamp || new Date().toISOString(),
+      userAgent: userAgent || 'unknown'
+    });
+    
+    // Keep only last 100 feedback entries
+    if (feedbackData.feedbackHistory.length > 100) {
+      feedbackData.feedbackHistory = feedbackData.feedbackHistory.slice(-100);
+    }
+    
+    console.log(`📝 Feedback received: ${feedback} for recipe ${recipeId} (query: "${query}")`);
+    
+    res.json({ 
+      success: true, 
+      message: "Feedback recorded",
+      feedbackQuality: Math.round((feedbackData.helpfulFeedback / feedbackData.totalFeedback) * 100)
+    });
+    
+  } catch (error: any) {
+    console.error('Error processing feedback:', error);
+    res.status(500).json({ error: "Failed to process feedback" });
+  }
+});
+
+// Get feedback analytics
+app.get("/feedback-analytics", (req, res) => {
+  const recentFeedback = feedbackData.feedbackHistory.slice(-20);
+  
+  res.json({
+    totalFeedback: feedbackData.totalFeedback,
+    helpfulFeedback: feedbackData.helpfulFeedback,
+    notHelpfulFeedback: feedbackData.notHelpfulFeedback,
+    feedbackQuality: feedbackData.totalFeedback > 0 
+      ? Math.round((feedbackData.helpfulFeedback / feedbackData.totalFeedback) * 100)
+      : 0,
+    recentFeedback: recentFeedback
+  });
 });
 
 const PORT = process.env.PORT || 3001;
