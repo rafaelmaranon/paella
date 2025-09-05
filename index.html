@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paella Master - Your Guide to Perfect Paella</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-utensils paella-icon"></i>
+                    <h1>Paella Master</h1>
+                </div>
+                <div class="measurement-toggle">
+                    <button id="metricBtn" class="measurement-btn active">Metric</button>
+                    <button id="imperialBtn" class="measurement-btn">US</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Navigation -->
+        <nav class="main-nav">
+            <button class="nav-btn active" data-section="overview">
+                <i class="fas fa-book"></i>
+                <span>Overview</span>
+            </button>
+            <button class="nav-btn" data-section="ingredients">
+                <i class="fas fa-shopping-basket"></i>
+                <span>Ingredients</span>
+            </button>
+            <button class="nav-btn" data-section="recipe">
+                <i class="fas fa-fire"></i>
+                <span>Recipe</span>
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Overview Section -->
+            <section id="overview" class="content-section active">
+                <div class="section-header">
+                    <h2>Paella Overview</h2>
+                </div>
+                
+                <div class="expandable-sections">
+                    <div class="expandable-section">
+                        <button class="section-toggle" data-target="history">
+                            <i class="fas fa-history"></i>
+                            <span>History</span>
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </button>
+                        <div class="section-content" id="history">
+                            <div class="history-content">
+                                <h3>The Story of Paella</h3>
+                                <p>Paella originated in the Valencia region of Spain in the 19th century. Farmers and laborers would cook rice with whatever ingredients they had available - typically rabbit, chicken, beans, and vegetables - in a large flat pan over an open fire.</p>
+                                
+                                <p>The dish gets its name from the pan it's cooked in - "paella" means "pan" in Valencian. What started as a humble peasant dish has become one of Spain's most iconic culinary exports.</p>
+                                
+                                <h4>Paella in the United States</h4>
+                                <p>Today, paella has gained tremendous popularity in the United States, becoming a favorite at restaurants, food festivals, and home kitchens. The dish's communal nature and impressive presentation make it perfect for gatherings and celebrations.</p>
+                                
+                                <div class="guinness-record">
+                                    <h4>🏆 Guinness World Record: The Largest Paella in the World</h4>
+                                    <p>In 2019, Galbis, a Spanish company, set the Guinness World Record for creating the largest paella ever made. This incredible feat took place in Valencia, Spain, and required:</p>
+                                    <ul>
+                                        <li>Over 1,200 kg of rice</li>
+                                        <li>2,400 kg of chicken</li>
+                                        <li>1,200 kg of rabbit</li>
+                                        <li>600 kg of green beans</li>
+                                        <li>300 kg of tomatoes</li>
+                                        <li>A massive 20-meter diameter paella pan</li>
+                                    </ul>
+                                    <p>This record-breaking paella could feed over 110,000 people and showcased the incredible scale and community spirit that paella represents.</p>
+                                    <div class="record-links">
+                                        <a href="https://galbis.com/record-guiness-galbis-paellas-gigantes" target="_blank" class="external-link">
+                                            <i class="fas fa-external-link-alt"></i> Learn more about the record
+                                        </a>
+                                        <a href="https://youtu.be/h7WOVipSOvU" target="_blank" class="external-link">
+                                            <i class="fab fa-youtube"></i> Watch the video
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="expandable-section">
+                        <button class="section-toggle" data-target="vocabulary">
+                            <i class="fas fa-language"></i>
+                            <span>Vocabulary</span>
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </button>
+                        <div class="section-content" id="vocabulary">
+                            <div class="vocabulary-content">
+                                <h3>Essential Paella Terms</h3>
+                                <div class="vocab-grid">
+                                    <div class="vocab-item">
+                                        <strong>Paella</strong>
+                                        <span>The pan used for cooking, also the name of the dish</span>
+                                    </div>
+                                    <div class="vocab-item">
+                                        <strong>Paellera</strong>
+                                        <span>Another term for the paella pan</span>
+                                    </div>
+                                    <div class="vocab-item">
+                                        <strong>Socarrat</strong>
+                                        <span>The crispy, caramelized rice at the bottom of the pan</span>
+                                    </div>
+                                    <div class="vocab-item">
+                                        <strong>Bomba Rice</strong>
+                                        <span>Short-grain rice traditionally used in paella</span>
+                                    </div>
+                                    <div class="vocab-item">
+                                        <strong>Azafrán</strong>
+                                        <span>Saffron - the precious spice that gives paella its golden color</span>
+                                    </div>
+                                    <div class="vocab-item">
+                                        <strong>Caldo</strong>
+                                        <span>Broth or stock used to cook the rice</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="expandable-section">
+                        <button class="section-toggle" data-target="learn-more">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Learn More</span>
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </button>
+                        <div class="section-content" id="learn-more">
+                            <div class="learn-more-content">
+                                <h3>Resources & Learning</h3>
+                                
+                                <div class="resource-category">
+                                    <h4>🇺🇸 United States Resources</h4>
+                                    <div class="resource-item">
+                                        <h5>Chef José Andrés - Little Spain</h5>
+                                        <p>World-renowned Spanish chef with restaurants across the US</p>
+                                        <a href="https://www.littlespain.com/paella/" target="_blank" class="resource-link">
+                                            <i class="fas fa-external-link-alt"></i> Visit Little Spain
+                                        </a>
+                                        <p class="resource-note">José Andrés also has excellent videos with his daughter exploring Spanish tapas on Prime Video</p>
+                                    </div>
+                                </div>
+
+                                <div class="resource-category">
+                                    <h4>🇪🇸 Spain Resources</h4>
+                                    <div class="resource-item">
+                                        <h5>Chef Amadeo</h5>
+                                        <p>Expert Spanish chef with comprehensive paella tutorials</p>
+                                        <a href="https://www.chefamadeo.com/en/home/" target="_blank" class="resource-link">
+                                            <i class="fas fa-external-link-alt"></i> Visit Chef Amadeo
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="resource-category">
+                                    <h4>📚 Additional Learning</h4>
+                                    <ul class="learning-list">
+                                        <li>Traditional Valencian paella techniques</li>
+                                        <li>Seafood paella preparation methods</li>
+                                        <li>Proper rice cooking techniques</li>
+                                        <li>Creating the perfect socarrat</li>
+                                        <li>Paella pan selection and care</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Ingredients Section -->
+            <section id="ingredients" class="content-section">
+                <div class="section-header">
+                    <h2>Ingredients & Calculator</h2>
+                </div>
+
+                <div class="ingredients-controls">
+                    <div class="people-selector">
+                        <label for="peopleCount">Number of People:</label>
+                        <input type="number" id="peopleCount" min="1" max="100" value="4">
+                    </div>
+
+                    <div class="paella-type-selector">
+                        <label>Paella Type:</label>
+                        <div class="type-buttons">
+                            <button class="type-btn active" data-type="valenciana">
+                                <i class="fas fa-home"></i>
+                                <span>Valenciana</span>
+                            </button>
+                            <button class="type-btn" data-type="seafood">
+                                <i class="fas fa-fish"></i>
+                                <span>Seafood & Meat</span>
+                            </button>
+                            <button class="type-btn" data-type="squid-ink">
+                                <i class="fas fa-circle"></i>
+                                <span>Squid Ink</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="paella-overview" id="paellaOverview">
+                    <h3>Valenciana Paella</h3>
+                    <p>The traditional paella from Valencia, made with chicken, rabbit, green beans, and white beans. This is the original paella recipe that started it all.</p>
+                </div>
+
+                <div class="ingredients-list" id="ingredientsList">
+                    <!-- Ingredients will be populated by JavaScript -->
+                </div>
+
+                <div class="paellera-calculator">
+                    <h3>Paellera Size Calculator</h3>
+                    <div class="calculator-result" id="paelleraSize">
+                        <!-- Paellera size will be calculated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recipe Section -->
+            <section id="recipe" class="content-section">
+                <div class="section-header">
+                    <h2>Cooking Process</h2>
+                </div>
+
+                <div class="recipe-steps" id="recipeSteps">
+                    <!-- Recipe steps will be populated by JavaScript -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
