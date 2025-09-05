@@ -930,6 +930,9 @@ async function performAISearch() {
 function displayAISearchResults(results, query) {
     const resultsDiv = document.getElementById('aiSearchResults');
     
+    // Store results globally so other functions can access them
+    window.currentSearchResults = results;
+    
     if (!results || results.length === 0) {
         resultsDiv.innerHTML = `
             <div class="text-center py-8">
@@ -979,11 +982,8 @@ function displayAISearchResults(results, query) {
                 ${allergenBadges ? `<div class="mb-3"><strong class="text-red-700">Contains:</strong> ${allergenBadges}</div>` : ''}
                 
                                             <div class="flex gap-2">
-                                <button onclick="openCookingMode('${recipe.id}')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                                    <i class="fas fa-utensils mr-2"></i>Start Cooking
-                                </button>
-                                <button onclick="viewRecipeDetails('${recipe.id}')" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
-                                    <i class="fas fa-info-circle mr-2"></i>View Details
+                                <button onclick="viewRecipeDetails('${recipe.id}')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                                    <i class="fas fa-info-circle mr-2"></i>View Recipe
                                 </button>
                             </div>
                             
@@ -991,10 +991,10 @@ function displayAISearchResults(results, query) {
                                 <div class="flex items-center justify-between">
                                     <span class="text-sm text-gray-600">Was this result helpful?</span>
                                     <div class="flex gap-2">
-                                        <button onclick="submitFeedback('${recipe.id}', 'helpful', '${query.replace(/'/g, "\\'")}')" class="px-3 py-1 text-sm bg-green-100 text-green-700 rounded-full hover:bg-green-200 transition-colors">
+                                        <button onclick="submitFeedback('${recipe.id}', 'helpful', '${query.replace(/'/g, "\\'")}', event)" class="px-3 py-1 text-sm bg-green-100 text-green-700 rounded-full hover:bg-green-200 transition-colors">
                                             <i class="fas fa-thumbs-up mr-1"></i>Helpful
                                         </button>
-                                        <button onclick="submitFeedback('${recipe.id}', 'not_helpful', '${query.replace(/'/g, "\\'")}')" class="px-3 py-1 text-sm bg-red-100 text-red-700 rounded-full hover:bg-red-200 transition-colors">
+                                        <button onclick="submitFeedback('${recipe.id}', 'not_helpful', '${query.replace(/'/g, "\\'")}', event)" class="px-3 py-1 text-sm bg-red-100 text-red-700 rounded-full hover:bg-red-200 transition-colors">
                                             <i class="fas fa-thumbs-down mr-1"></i>Not Helpful
                                         </button>
                                     </div>
@@ -1007,22 +1007,88 @@ function displayAISearchResults(results, query) {
     resultsDiv.innerHTML = html;
 }
 
-function openCookingMode(recipeId) {
-    // This would open the cooking mode for the specific recipe
-    console.log('Opening cooking mode for recipe:', recipeId);
-    // For now, just show an alert
-    alert(`Cooking mode for ${recipeId} would open here!`);
-}
-
 function viewRecipeDetails(recipeId) {
-    // This would show detailed recipe information
     console.log('Viewing details for recipe:', recipeId);
-    // For now, just show an alert
-    alert(`Recipe details for ${recipeId} would show here!`);
+    
+    // Find the recipe data from the current search results
+    const recipe = window.currentSearchResults?.find(r => r.id === recipeId);
+    if (!recipe) {
+        alert('Recipe not found. Please search again.');
+        return;
+    }
+    
+    // Create recipe details modal
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    modal.innerHTML = `
+        <div class="bg-white rounded-xl p-8 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-gray-900">${recipe.title}</h2>
+                <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <img src="${recipe.image}" alt="${recipe.title}" class="w-full h-64 object-cover rounded-lg mb-4">
+                    
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="text-center p-3 bg-blue-100 rounded-lg">
+                            <i class="fas fa-clock text-2xl text-blue-600 mb-2"></i>
+                            <p class="font-semibold">${recipe.time_minutes} min</p>
+                        </div>
+                        <div class="text-center p-3 bg-green-100 rounded-lg">
+                            <i class="fas fa-signal text-2xl text-green-600 mb-2"></i>
+                            <p class="font-semibold">${recipe.difficulty}</p>
+                        </div>
+                        <div class="text-center p-3 bg-purple-100 rounded-lg">
+                            <i class="fas fa-map-marker-alt text-2xl text-purple-600 mb-2"></i>
+                            <p class="font-semibold">${recipe.region}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">📝 Description</h3>
+                    <p class="text-gray-700 mb-6">${recipe.description}</p>
+                    
+                    <h3 class="text-xl font-semibold mb-4">🥘 Ingredients</h3>
+                    <ul class="space-y-2 mb-6">
+                        ${recipe.ingredients.map(ingredient => `
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-600 mr-2"></i>
+                                <span>${ingredient}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                    
+                    ${recipe.allergens && recipe.allergens.length > 0 ? `
+                        <h3 class="text-xl font-semibold mb-4">⚠️ Allergens</h3>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            ${recipe.allergens.map(allergen => `
+                                <span class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm">${allergen}</span>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+            
+            <div class="mt-8">
+                <button onclick="this.closest('.fixed').remove()" class="px-6 py-3 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
+                    <i class="fas fa-times mr-2"></i>Close
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
 }
 
 // AI Feedback functionality
-async function submitFeedback(recipeId, feedback, query) {
+async function submitFeedback(recipeId, feedback, query, event) {
+    console.log('submitFeedback called:', { recipeId, feedback, query, event });
+    
     try {
         const response = await fetch('http://localhost:3001/feedback', {
             method: 'POST',
@@ -1038,24 +1104,40 @@ async function submitFeedback(recipeId, feedback, query) {
             })
         });
         
+        console.log('Response status:', response.status);
+        console.log('Response ok:', response.ok);
+        
         if (response.ok) {
-            // Show success feedback
-            const button = event.target.closest('button');
-            const originalText = button.innerHTML;
-            button.innerHTML = '<i class="fas fa-check mr-1"></i>Thanks!';
-            button.classList.remove('bg-green-100', 'text-green-700', 'bg-red-100', 'text-red-700');
-            button.classList.add('bg-blue-100', 'text-blue-700');
-            button.disabled = true;
+            const responseData = await response.json();
+            console.log('Response data:', responseData);
+            console.log('Feedback submitted successfully');
             
-            // Reset after 2 seconds
-            setTimeout(() => {
-                button.innerHTML = originalText;
-                button.classList.remove('bg-blue-100', 'text-blue-700');
-                button.classList.add(feedback === 'helpful' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700');
-                button.disabled = false;
-            }, 2000);
+            // Show success feedback
+            if (event && event.target) {
+                const button = event.target.closest('button');
+                if (button) {
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '<i class="fas fa-check mr-1"></i>Thanks!';
+                    button.classList.remove('bg-green-100', 'text-green-700', 'bg-red-100', 'text-red-700');
+                    button.classList.add('bg-blue-100', 'text-blue-700');
+                    button.disabled = true;
+                    
+                    // Reset after 2 seconds
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.classList.remove('bg-blue-100', 'text-blue-700');
+                        button.classList.add(feedback === 'helpful' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700');
+                        button.disabled = false;
+                    }, 2000);
+                }
+            } else {
+                // Fallback: show alert if event handling fails
+                alert('Thanks for your feedback!');
+            }
         } else {
-            throw new Error('Failed to submit feedback');
+            const errorText = await response.text();
+            console.error('Response error:', response.status, errorText);
+            throw new Error(`Failed to submit feedback: ${response.status} ${errorText}`);
         }
     } catch (error) {
         console.error('Error submitting feedback:', error);
